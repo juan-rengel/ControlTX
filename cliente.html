@@ -1,682 +1,334 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LoanControl — Clientes</title>
-
-  <!-- Fonte -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome (ícones) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"/>
-
-  <style>
-  /* ===========================
-     Clientes page — styles
-     Neutral cards; dark/light automatic
-     =========================== */
-
-  :root{
-    --sidebar-w: 250px;
-    --bg: #0f1724;
-    --card: #121626;
-    --muted: #a8b0c8;
-    --text: #eef2ff;
-    --accent: #0078d7;
-    --glass: rgba(255,255,255,0.03);
-    --radius: 12px;
-    --shadow: 0 6px 18px rgba(2,6,23,0.6);
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>👥 Clientes - MJ Tecnologia</title>
+<style>
+  :root {
+    --bg: #0a0f1f;
+    --card: #141c2f;
+    --text: #e2e8f0;
+    --accent: #007bff;
+    --sidebar: #10172a;
+    --input-bg: #1e263b;
   }
-
-  /* light overrides */
-  body.light{
-    --bg: #f5f7fb;
+  body.light {
+    --bg: #f4f6fb;
     --card: #ffffff;
-    --muted: #55607a;
-    --text: #0b1320;
-    --accent: #1565d8;
-    --glass: rgba(0,0,0,0.03);
-    --shadow: 0 6px 18px rgba(16,24,40,0.06);
+    --text: #111;
+    --accent: #007bff;
+    --sidebar: #f0f0f0;
+    --input-bg: #f1f1f1;
   }
 
-  *{box-sizing:border-box;font-family:"Poppins",sans-serif}
-  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-
-  /* Sidebar (compact copy of your app) */
-  .page-wrapper{display:flex;min-height:100vh}
-  .sidebar{
-    width:var(--sidebar-w);
-    background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent),var(--card);
-    padding:18px;
-    display:flex;flex-direction:column;gap:12px;
-    box-shadow:var(--shadow);
-  }
-  .brand{display:flex;align-items:center;gap:12px}
-  .brand .logo{font-size:26px}
-  .brand h1{font-size:1.05rem;margin:0}
-  .brand small{color:var(--muted)}
-  .menu{margin-top:12px;display:flex;flex-direction:column;gap:6px}
-  .menu a{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;color:var(--text);text-decoration:none}
-  .menu a:hover{background:var(--glass);color:var(--accent)}
-  .menu a.active{background:var(--accent);color:#fff}
-  .sidebar-footer{margin-top:auto;display:flex;flex-direction:column;gap:8px}
-  .theme-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
-
-  /* Main area */
-  .main{
-    flex:1;
-    padding:20px;
-    display:flex;flex-direction:column;
-  }
-  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-  .topbar .left{display:flex;align-items:center;gap:12px}
-  .mobile-toggle{display:none;background:transparent;border:1px solid rgba(255,255,255,0.03);padding:8px;border-radius:8px;color:var(--text)}
-  .page-title h2{margin:0;font-size:1.25rem}
-
-  /* Grid layout */
-  .layout{display:grid;grid-template-columns:360px 1fr;gap:18px}
-  @media (max-width:920px){
-    .layout{grid-template-columns:1fr; padding-bottom:80px}
-    .mobile-toggle{display:inline-flex}
-    .sidebar{position:fixed;left:-100%;top:0;height:100%;z-index:50;transition:left .28s}
-    .sidebar.open{left:0}
-    body.sidebar-open{overflow:hidden}
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    transition: 0.4s ease;
   }
 
-  /* Left column: cadastro card + filtros */
-  .left-col .card, .right-col .card{background:var(--card);padding:16px;border-radius:var(--radius);box-shadow:var(--shadow)}
-  .left-col .card h3{margin:0 0 12px;color:var(--accent)}
-
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .form-grid .full{grid-column:1/3}
-  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-  input[type="text"], input[type="tel"], input[type="email"], input[type="file"], select{
-    width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)
-  }
-  input:focus, select:focus{outline:none;border-color:var(--accent);box-shadow:0 4px 14px rgba(0,120,215,0.12)}
-
-  .actions{display:flex;gap:8px;margin-top:12px}
-  .btn{padding:10px 12px;border-radius:10px;font-weight:600;border:none;cursor:pointer}
-  .btn.primary{background:var(--accent);color:#fff}
-  .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.06)}
-  .btn.danger{background:#e53935;color:#fff}
-
-  /* Right column: cards of clients */
-  .cards {display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-  .client-card{
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent), var(--card);
-    border-radius:12px;padding:14px;position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s;
-    border:1px solid rgba(255,255,255,0.02);
-  }
-  .client-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(2,6,23,0.5)}
-  .client-head{display:flex;align-items:center;gap:12px}
-  .avatar{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#222,#1b2a4a);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;overflow:hidden}
-  .avatar img{width:100%;height:100%;object-fit:cover}
-  .client-info{flex:1}
-  .client-info h4{margin:0;font-size:1rem}
-  .client-info small{color:var(--muted)}
-  .client-meta{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-  .chip{background:var(--glass);padding:6px 8px;border-radius:10px;font-size:13px;color:var(--muted)}
-
-  .card-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-  .small-btn{padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);cursor:pointer}
-  .small-btn.whats{background:#25D366;color:#fff;border:none}
-  .small-btn.history{background:transparent;color:var(--accent);border:1px solid rgba(0,120,215,0.12)}
-
-  /* expandable details */
-  .details{margin-top:12px;max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 0}
-  .details.open{max-height:420px;padding-top:12px}
-  .details .docs{display:flex;gap:8px;flex-wrap:wrap}
-  .thumb{width:80px;height:62px;border-radius:8px;background:#0b1220;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.04)}
-  .thumb img{width:100%;height:100%;object-fit:cover;cursor:pointer}
-
-  /* modal preview */
-  .modal{position:fixed;inset:0;background:rgba(2,6,23,0.75);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .18s}
-  .modal.show{opacity:1;pointer-events:auto}
-  .modal img{max-width:90vw;max-height:80vh;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
-
-  /* cpf invalid */
-  .invalid{border-color:#e53935 !important}
-
-  /* empty state */
-  .empty{color:var(--muted);padding:18px;border-radius:10px;background:var(--glass);text-align:center}
-
-  /* footer */
-  .page-footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-
+  /* ===== SIDEBAR ===== */
   .sidebar {
-  transition: left .3s ease, box-shadow .3s ease;
-}
-.sidebar.open {
-  left: 0;
-  box-shadow: 0 0 0 100vw rgba(0,0,0,0.4);
-}
-  </style>
+    width: 240px;
+    background: var(--sidebar);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: transform 0.4s ease;
+  }
+
+  .sidebar h2 {
+    text-align: center;
+    padding: 20px 0;
+    color: var(--accent);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .sidebar a {
+    color: var(--text);
+    padding: 12px 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    margin: 6px 10px;
+    transition: 0.3s;
+  }
+
+  .sidebar a:hover, .sidebar a.ativo {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--card);
+    color: var(--accent);
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 240px;
+    right: 0;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: left 0.3s ease;
+  }
+
+  .menu-toggle {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 22px;
+    cursor: pointer;
+    margin-right: 10px;
+    display: none;
+  }
+
+  .theme-toggle {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  main {
+    margin-left: 260px;
+    margin-top: 90px;
+    padding: 0 20px;
+    max-width: 1100px;
+    width: 100%;
+    transition: margin-left 0.3s ease;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    color: var(--accent);
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 15px;
+  }
+
+  button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 6px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .btn-danger { background: red; }
+  .btn-secondary { background: #444; }
+
+  .client-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .client-card span {
+    font-size: 15px;
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .menu-toggle { display: block; }
+    .sidebar { transform: translateX(-100%); opacity: 0; }
+    .sidebar.ativo { transform: translateX(0); opacity: 1; }
+    header { left: 0; }
+    main { margin-left: 0; }
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 900;
+    display: none;
+  }
+  .overlay.ativo { display: block; }
+</style>
 </head>
+
 <body>
-  <div class="page-wrapper">
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="logo">💸</div>
-        <div>
-          <h1>LoanControl</h1>
-          <small>Controle de Empréstimos</small>
-        </div>
-      </div>
+  <aside class="sidebar" id="sidebar">
+    <h2>📊 MJ</h2>
+    <a href="index.html">🏠 Dashboard</a>
+    <a href="cliente.html" class="ativo">👥 Clientes</a>
+    <a href="emprestimo.html">💸 Empréstimos</a>
+    <a href="config.html">⚙️ Configurações</a>
+  </aside>
 
-      <nav class="menu" aria-label="Menu principal">
-        <a href="index.html" class="menu-item" data-target="dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a>
-        <a href="cliente.html" class="menu-item active" data-target="clientes"><i class="fa-solid fa-user"></i> Clientes</a>
-        <a href="emprestimo.html" class="menu-item" data-target="emprestimos"><i class="fa-solid fa-hand-holding-dollar"></i> Empréstimos</a>
-        <a href="#" class="menu-item" data-target="pagamentos"><i class="fa-solid fa-receipt"></i> Pagamentos</a>
-        <a href="#" class="menu-item" data-target="calendario"><i class="fa-solid fa-calendar-days"></i> Calendário</a>
-        <a href="#" class="menu-item" data-target="relatorios"><i class="fa-solid fa-chart-line"></i> Relatórios</a>
-        <a href="#" class="menu-item" data-target="config"><i class="fa-solid fa-gear"></i> Configurações</a>
-      </nav>
+  <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
 
-      <div class="sidebar-footer">
-        <button class="theme-toggle" id="themeToggle">🌙 Alternar Tema</button>
-        <small class="version">v1.0</small>
-      </div>
-    </aside>
+  <header>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <h1>👥 Clientes - MJ Tecnologia</h1>
+    </div>
+    <button class="theme-toggle" onclick="alternarTema()">🌙 Tema</button>
+  </header>
 
-    <!-- MAIN -->
-    <main class="main" id="main">
-      <div class="topbar">
-        <div class="left">
-          <button class="mobile-toggle" id="mobileToggle"><i class="fa-solid fa-bars"></i></button>
-          <div class="page-title"><h2>Clientes</h2></div>
-        </div>
-        <div class="right top-actions">
-          <button class="btn primary" id="newClientBtn"><i class="fa-solid fa-user-plus"></i> Novo Cliente</button>
-        </div>
-      </div>
+  <main>
+    <div class="card">
+      <h2>Novo Cliente</h2>
+      <label>Nome:</label>
+      <input type="text" id="nome" placeholder="Nome completo" />
+      <label>Telefone (WhatsApp):</label>
+      <input type="text" id="telefone" placeholder="(DDD) 00000-0000" />
+      <label>Endereço:</label>
+      <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade" />
+      <label>CPF:</label>
+      <input type="text" id="cpf" placeholder="000.000.000-00" />
+      <label>Foto Documento:</label>
+      <input type="file" id="documento" />
+      <label>Comprovante de Residência:</label>
+      <input type="file" id="residencia" />
+      <button onclick="salvarCliente()">💾 Salvar</button>
+      <button class="btn-secondary" onclick="limparCampos()">🧹 Limpar</button>
+    </div>
 
-      <div class="layout">
-        <!-- LEFT COL -->
-        <div class="left-col">
-          <div class="card" id="formCard" aria-hidden="true" style="display:none;">
-            <h3 id="formTitle">Cadastrar Cliente</h3>
-            <form id="clientForm">
-              <div class="form-grid">
-                <div>
-                  <label for="fullName">Nome completo</label>
-                  <input id="fullName" type="text" placeholder="Nome completo" required>
-                </div>
-                <div>
-                  <label for="phone">Telefone / WhatsApp</label>
-                  <input id="phone" type="tel" placeholder="(00) 00000-0000">
-                </div>
-                <div>
-                  <label for="cpf">CPF</label>
-                  <input id="cpf" type="text" placeholder="000.000.000-00" maxlength="14">
-                </div>
-                <div>
-                  <label for="dob">Data de cadastro</label>
-                  <input id="dob" type="date" value="">
-                </div>
-
-                <div class="full">
-                  <label for="address">Endereço</label>
-                  <input id="address" type="text" placeholder="Rua, número, bairro, cidade - UF">
-                </div>
-
-                <div class="full">
-                  <label>Fotos (perfil / documento / comprovante)</label>
-                  <div style="display:flex;gap:8px;flex-wrap:wrap">
-                    <label class="btn ghost" style="display:inline-flex;align-items:center;gap:8px">
-                      <i class="fa-solid fa-camera"></i> Perfil
-                      <input id="fileProfile" type="file" accept="image/*" style="display:none">
-                    </label>
-
-                    <label class="btn ghost" style="display:inline-flex;align-items:center;gap:8px">
-                      <i class="fa-regular fa-id-card"></i> Documento
-                      <input id="fileDoc" type="file" accept="image/*" style="display:none">
-                    </label>
-
-                    <label class="btn ghost" style="display:inline-flex;align-items:center;gap:8px">
-                      <i class="fa-solid fa-house"></i> Comprovante
-                      <input id="fileProof" type="file" accept="image/*" style="display:none">
-                    </label>
-                  </div>
-
-                  <div id="previewUploads" style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"></div>
-                </div>
-
-              </div>
-
-              <div class="actions">
-                <button type="submit" class="btn primary" id="saveClient">Salvar</button>
-                <button type="button" class="btn ghost" id="cancelClient">Cancelar</button>
-              </div>
-            </form>
-          </div>
-
-          <div class="card">
-            <h3>Filtros</h3>
-            <label>Procurar por nome</label>
-            <input id="searchClient" type="text" placeholder="Pesquisar...">
-            <label>Mostrar</label>
-            <select id="filterStatus">
-              <option value="all">Todos</option>
-              <option value="withDebt">Com Pendência</option>
-              <option value="noDebt">Sem Pendência</option>
-            </select>
-          </div>
-
-          <div class="card">
-            <h3>Ajuda rápida</h3>
-            <p class="empty" style="margin:0">Aqui você pode cadastrar clientes, anexar fotos dos documentos e ver ações rápidas (editar, histórico, WhatsApp).</p>
-          </div>
-        </div>
-
-        <!-- RIGHT COL -->
-        <div class="right-col">
-          <div class="card">
-            <h3>Clientes</h3>
-            <div id="cardsContainer" class="cards">
-              <!-- Client cards are injected here by JS (see below) -->
-              <div class="empty">Nenhum cliente — clique em "Novo Cliente" para cadastrar</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3>Visualizar em lista</h3>
-            <div id="listContainer" class="table-placeholder">Tabela de clientes (vazia)</div>
-          </div>
-
-          <div class="page-footer">© LoanControl — Clientes</div>
-        </div>
-      </div>
-
-      <!-- image modal -->
-      <div id="imgModal" class="modal" aria-hidden="true">
-        <img src="" alt="Preview" id="modalImg">
-      </div>
-    </main>
-  </div>
+    <div class="card">
+      <h2>📋 Clientes Cadastrados</h2>
+      <div id="listaClientes"></div>
+    </div>
+  </main>
 
   <script>
-  /* =========================
-     UI-only JS for Clientes page
-     - Handles UI, previews, card expand/collapse
-     - Does NOT persist data. Use this as hook for your main.js
-     ========================= */
-
-  (function(){
-    // Helpers
-    const $ = (sel, ctx=document) => ctx.querySelector(sel);
-    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
-
-    // Elements
-    const sidebar = document.getElementById('sidebar');
-    const mobileToggle = document.getElementById('mobileToggle');
-    const newClientBtn = document.getElementById('newClientBtn');
-    const formCard = document.getElementById('formCard');
-    const clientForm = document.getElementById('clientForm');
-    const cancelClient = document.getElementById('cancelClient');
-    const previewUploads = document.getElementById('previewUploads');
-    const fileProfile = document.getElementById('fileProfile');
-    const fileDoc = document.getElementById('fileDoc');
-    const fileProof = document.getElementById('fileProof');
-    const cardsContainer = document.getElementById('cardsContainer');
-    const imgModal = document.getElementById('imgModal');
-    const modalImg = document.getElementById('modalImg');
-    const themeToggle = document.getElementById('themeToggle');
-    const searchClient = document.getElementById('searchClient');
-
-    // Temporary in-memory list (UI demo). Replace with your storage later.
-    let clients = [];
-
-    // Theme: auto from localStorage
-    const THEME_KEY = 'loanTheme';
-    (function applySavedTheme(){
-      const t = localStorage.getItem(THEME_KEY) || 'dark';
-      if(t === 'light') document.body.classList.add('light');
-      else document.body.classList.remove('light');
-    })();
-    themeToggle.addEventListener('click', () => {
-      const isLight = document.body.classList.toggle('light');
-      localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
-    });
-
-    // Mobile sidebar toggle
-    mobileToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      document.body.classList.toggle('sidebar-open');
-    });
-
-    // Show form
-    newClientBtn.addEventListener('click', () => {
-      formCard.style.display = 'block';
-      formCard.scrollIntoView({behavior:'smooth'});
-      document.getElementById('formTitle').textContent = 'Cadastrar Cliente';
-      clientForm.reset();
-      previewUploads.innerHTML = '';
-      editingIndex = -1;
-    });
-
-    cancelClient.addEventListener('click', () => {
-      formCard.style.display = 'none';
-      clientForm.reset();
-      previewUploads.innerHTML = '';
-    });
-
-    // file inputs previews
-    function previewFile(inputEl, slotName){
-      const file = inputEl.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        // create thumb
-        const div = document.createElement('div');
-        div.className = 'thumb';
-        div.dataset.slot = slotName;
-        div.innerHTML = `<img src="${e.target.result}" alt="${slotName}">`;
-        div.addEventListener('click', () => openPreview(e.target.result));
-        // replace previous same slot
-        const existing = previewUploads.querySelector(`[data-slot="${slotName}"]`);
-        if(existing) existing.remove();
-        previewUploads.appendChild(div);
-      };
-      reader.readAsDataURL(file);
+    // ====== THEME ======
+    function alternarTema() {
+      document.body.classList.toggle("light");
+      localStorage.setItem("tema", document.body.classList.contains("light") ? "light" : "dark");
     }
 
-    fileProfile.addEventListener('change', () => previewFile(fileProfile, 'profile'));
-    fileDoc.addEventListener('change', () => previewFile(fileDoc, 'doc'));
-    fileProof.addEventListener('change', () => previewFile(fileProof, 'proof'));
-
-    function openPreview(src){
-      modalImg.src = src;
-      imgModal.classList.add('show');
-      imgModal.setAttribute('aria-hidden','false');
+    function toggleMenu() {
+      sidebar.classList.toggle("ativo");
+      overlay.classList.toggle("ativo");
     }
-    imgModal.addEventListener('click', (e) => {
-      if(e.target === imgModal || e.target === modalImg){
-        imgModal.classList.remove('show');
-        imgModal.setAttribute('aria-hidden','true');
-      }
-    });
+    function fecharMenu() {
+      sidebar.classList.remove("ativo");
+      overlay.classList.remove("ativo");
+    }
 
-    
-    // Rendering clients (UI only). Hook this to your data later.
-    function renderClients(list){
-      cardsContainer.innerHTML = '';
-      if(!list || list.length===0){
-        cardsContainer.innerHTML = '<div class="empty">Nenhum cliente — clique em "Novo Cliente" para cadastrar</div>';
-        return;
-      }
-      list.forEach((c, idx) => {
-        const card = document.createElement('article');
-        card.className = 'client-card';
-        card.innerHTML = `
-          <div class="client-head">
-            <div class="avatar">${c.profile ? `<img src="${c.profile}" alt="${c.name}">` : c.name.split(' ').slice(0,2).map(x=>x[0]).join('')}</div>
-            <div class="client-info">
-              <h4>${c.name}</h4>
-              <small>${c.cpf || '—'} • ${c.phone || '—'}</small>
-              <div class="client-meta">
-                <span class="chip">Cadastrado: ${c.date || '—'}</span>
-                <span class="chip">Cidade: ${c.city || '—'}</span>
-              </div>
-            </div>
-            <div style="margin-left:12px;text-align:right">
-              <button class="small-btn history" data-idx="${idx}"><i class="fa-solid fa-clock-rotate-left"></i> Hist.</button>
-              <button class="small-btn" data-idx="${idx}" id="toggle${idx}"><i class="fa-solid fa-angle-down"></i></button>
-            </div>
-          </div>
+    // ====== CLIENTES ======
+    let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
 
-          <div class="details" id="details${idx}">
-            <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
-              <div style="flex:1">
-                <p><strong>Endereço:</strong> ${c.address || '—'}</p>
-                <p><strong>Observações:</strong> ${c.notes || '—'}</p>
-              </div>
-              <div style="width:220px">
-                <div class="docs">
-                  ${c.profile ? `<div class="thumb"><img src="${c.profile}" alt="perfil"></div>` : ''}
-                  ${c.doc ? `<div class="thumb"><img src="${c.doc}" alt="doc"></div>` : ''}
-                  ${c.proof ? `<div class="thumb"><img src="${c.proof}" alt="proof"></div>` : ''}
-                </div>
-              </div>
-            </div>
+    function salvarCliente() {
+      const nome = nomeEl.value.trim();
+      const telefone = telefoneEl.value.trim();
+      const endereco = enderecoEl.value.trim();
+      const cpf = cpfEl.value.trim();
+      if (!nome || !telefone) return alert("Preencha os campos obrigatórios!");
 
-            <div class="card-actions">
-              <button class="small-btn" data-action="edit" data-idx="${idx}"><i class="fa-solid fa-pen"></i> Editar</button>
-              <button class="small-btn danger" data-action="delete" data-idx="${idx}"><i class="fa-solid fa-trash"></i> Excluir</button>
-              <button class="small-btn history" data-action="history" data-idx="${idx}"><i class="fa-solid fa-eye"></i> Ver Histórico</button>
-              <button class="small-btn whats" data-action="whats" data-idx="${idx}"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
-              <button class="small-btn primary" data-action="solicitar" data-idx="${idx}">
-              <i class="fa-solid fa-hand-holding-dollar"></i> Solicitar
-              </button>
-            </div>
+      const novo = { nome, telefone, endereco, cpf };
+      clientes.push(novo);
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+      renderClientes();
+      limparCampos();
+    }
+
+    function limparCampos() {
+      nomeEl.value = "";
+      telefoneEl.value = "";
+      enderecoEl.value = "";
+      cpfEl.value = "";
+    }
+
+    const nomeEl = document.getElementById("nome");
+    const telefoneEl = document.getElementById("telefone");
+    const enderecoEl = document.getElementById("endereco");
+    const cpfEl = document.getElementById("cpf");
+
+    function renderClientes() {
+      const lista = document.getElementById("listaClientes");
+      lista.innerHTML = "";
+      clientes.forEach((c, i) => {
+        const div = document.createElement("div");
+        div.className = "client-card";
+        div.innerHTML = `
+          <span>👤 ${c.nome} - 📞 ${c.telefone}</span>
+          <div>
+            <button onclick="editarCliente(${i})">✏️ Editar</button>
+            <button class="btn-danger" onclick="excluirCliente(${i})">🗑️ Excluir</button>
+            <button onclick="whatsCliente('${c.telefone}', '${c.nome}')">📱 WhatsApp</button>
+            <button onclick="solicitarEmprestimo(${i})">💸 Solicitar</button>
           </div>
         `;
-        cardsContainer.appendChild(card);
-
-        // toggle expand
-        const toggleBtn = card.querySelector(`#toggle${idx}`);
-        const details = card.querySelector(`#details${idx}`);
-        toggleBtn && toggleBtn.addEventListener('click', () => {
-          details.classList.toggle('open');
-        });
-
-        // actions (event delegation)
-        card.addEventListener('click', (ev) => {
-          const target = ev.target.closest('[data-action]') || ev.target.closest('[data-idx]');
-          if(!target) return;
-          const action = target.dataset.action;
-          const idx = parseInt(target.dataset.idx,10);
-          if(action === 'delete') {
-            if(confirm('Excluir cliente?')) {
-              clients.splice(idx,1);
-              renderClients(clients);
-            }
-          } else if(action === 'edit') {
-            openEditClient(idx);
-          } else if(action === 'whats') {
-            const c = clients[idx];
-            if(c.phone){
-              const msg = encodeURIComponent(`Olá ${c.name}, estamos entrando em contato sobre seu empréstimo.`);
-              window.open(`https://wa.me/${c.phone.replace(/\D/g,'')}?text=${msg}`, '_blank');
-            } else alert('Cliente sem telefone cadastrado.');
-          } else if(action === 'history'){
-            alert('Abrir histórico de empréstimos (hook para implementar).');
-          }
-            else if (action === 'solicitar') {
-            const c = clients[idx];
-            localStorage.setItem('emprestimoCliente', JSON.stringify({
-            nome: c.name,
-            telefone: c.phone
-          }));
-          
-  window.location.href = 'emprestimo.html';
-}
-        });
-
-        // thumbnails click to open modal
-        const thumbs = card.querySelectorAll('.thumb img');
-        thumbs.forEach(img => img.addEventListener('click', (e) => openPreview(e.target.src)));
+        lista.appendChild(div);
       });
     }
 
-    // stub: open edit
-    function openEditClient(idx){
-      const c = clients[idx];
-      if(!c) return;
-      formCard.style.display = 'block';
-      document.getElementById('formTitle').textContent = 'Editar Cliente';
-      document.getElementById('fullName').value = c.name || '';
-      document.getElementById('phone').value = c.phone || '';
-      document.getElementById('cpf').value = c.cpf || '';
-      document.getElementById('dob').value = c.date || '';
-      document.getElementById('address').value = c.address || '';
-      previewUploads.innerHTML = '';
-      if(c.profile) previewUploads.appendChild(createThumb(c.profile,'profile'));
-      if(c.doc) previewUploads.appendChild(createThumb(c.doc,'doc'));
-      if(c.proof) previewUploads.appendChild(createThumb(c.proof,'proof'));
-      editingIndex = idx;
+    function editarCliente(i) {
+      const c = clientes[i];
+      nomeEl.value = c.nome;
+      telefoneEl.value = c.telefone;
+      enderecoEl.value = c.endereco;
+      cpfEl.value = c.cpf;
+      clientes.splice(i, 1);
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+      renderClientes();
     }
 
-    function createThumb(src,slot){
-      const div = document.createElement('div');
-      div.className = 'thumb';
-      div.dataset.slot = slot;
-      div.innerHTML = `<img src="${src}" alt="${slot}">`;
-      div.addEventListener('click',()=>openPreview(src));
-      return div;
-    }
-
-    // submit (UI only)
-    let editingIndex = -1;
-    clientForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      // gather
-      const name = document.getElementById('fullName').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const cpf = document.getElementById('cpf').value.trim();
-      const date = document.getElementById('dob').value;
-      const address = document.getElementById('address').value.trim();
-
-      // cpf validate
-      if(!validaCPF(cpf)){
-        const cpfEl = document.getElementById('cpf');
-        cpfEl.classList.add('invalid');
-        alert('CPF inválido. Verifique e tente novamente.');
-        return;
-      } else {
-        document.getElementById('cpf').classList.remove('invalid');
+    function excluirCliente(i) {
+      if (confirm("Excluir este cliente?")) {
+        clientes.splice(i, 1);
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+        renderClientes();
       }
-
-      // read previews for images (if any)
-      const profileThumb = previewUploads.querySelector('[data-slot="profile"] img');
-      const docThumb = previewUploads.querySelector('[data-slot="doc"] img');
-      const proofThumb = previewUploads.querySelector('[data-slot="proof"] img');
-
-      const clientObj = {
-        name,
-        phone,
-        cpf,
-        date,
-        address,
-        profile: profileThumb ? profileThumb.src : null,
-        doc: docThumb ? docThumb.src : null,
-        proof: proofThumb ? proofThumb.src : null,
-        notes: ''
-      };
-
-      if(editingIndex >=0){
-        clients[editingIndex] = clientObj;
-        editingIndex = -1;
-      } else {
-        clients.unshift(clientObj); // add to start
-      }
-
-      renderClients(clients);
-      clientForm.reset();
-      previewUploads.innerHTML = '';
-      formCard.style.display = 'none';
-    });
-
-    // Create thumb helper exposed earlier
-    function createFromInput(fileInput, slot){
-      const f = fileInput.files[0];
-      if(!f) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        const div = createThumb(e.target.result, slot);
-        // replace existing
-        const existing = previewUploads.querySelector(`[data-slot="${slot}"]`);
-        if(existing) existing.remove();
-        previewUploads.appendChild(div);
-      };
-      reader.readAsDataURL(f);
-    }
-    // wire hidden file inputs to visible labels
-    // labels already wrap input; no further wiring needed, but listen changes:
-    fileProfile.addEventListener('change', ()=> createFromInput(fileProfile,'profile'));
-    fileDoc.addEventListener('change', ()=> createFromInput(fileDoc,'doc'));
-    fileProof.addEventListener('change', ()=> createFromInput(fileProof,'proof'));
-
-    // search filter (simple)
-    searchClient.addEventListener('input', (e) => {
-      const q = e.target.value.trim().toLowerCase();
-      if(!q) return renderClients(clients);
-      const filtered = clients.filter(c => (c.name||'').toLowerCase().includes(q) || (c.cpf||'').includes(q));
-      renderClients(filtered);
-    });
-
-    // CPF validator function (same as above in utils)
-    function validaCPF(cpf){
-      if(!cpf) return true;
-      const only = cpf.replace(/\D/g,'');
-      if(only.length !== 11) return false;
-      if(/^(\d)\1+$/.test(only)) return false;
-      const nums = only.split('').map(n=>parseInt(n,10));
-      let sum=0;
-      for(let i=0;i<9;i++) sum += nums[i]*(10-i);
-      let rev = 11 - (sum % 11);
-      if(rev===10||rev===11) rev=0;
-      if(rev !== nums[9]) return false;
-      sum=0;
-      for(let i=0;i<10;i++) sum += nums[i]*(11-i);
-      rev = 11 - (sum % 11);
-      if(rev===10||rev===11) rev=0;
-      return rev === nums[10];
     }
 
-    // initial render (demo data)
-    clients = [
-      {
-        name: 'Mariana Silva',
-        phone: '+5592999551234',
-        cpf: '12345678909',
-        date: '2025-01-12',
-        address: 'Rua das Flores, 123, Centro - AM',
-        profile: null,
-        doc: null,
-        proof: null,
-        notes: 'Cliente vip'
-      },
-      {
-        name: 'João Pereira',
-        phone: '',
-        cpf: '',
-        date: '2025-02-03',
-        address: 'Av. Brasil, 45 - SP',
-        profile: null,
-        doc: null,
-        proof: null,
-        notes: ''
-      }
-    ];
-    renderClients(clients);
-
-    // expose hooks for later integration
-    window._clientsUI = {
-      renderClients,
-      getClients: ()=>clients,
-      setClients: (arr)=>{clients = arr; renderClients(clients)}
-    };
-
-    // Fecha menu lateral ao clicar em um item ou fora (modo mobile)
-document.addEventListener('click', (e) => {
-  if (window.innerWidth <= 920) {
-    if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
-      sidebar.classList.remove('open');
-      document.body.classList.remove('sidebar-open');
+    function whatsCliente(fone, nome) {
+      const msg = `Olá ${nome}, tudo bem?`;
+      window.open(`https://wa.me/${fone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, "_blank");
     }
-  }
-});
 
-$$('.menu a').forEach(a => a.addEventListener('click', () => {
-  sidebar.classList.remove('open');
-  document.body.classList.remove('sidebar-open');
-}));
-  })();
+    function solicitarEmprestimo(i) {
+      const c = clientes[i];
+      localStorage.setItem("selectedClient", JSON.stringify(c));
+      window.location.href = "emprestimo.html";
+    }
+
+    renderClientes();
   </script>
 </body>
 </html>
-2
