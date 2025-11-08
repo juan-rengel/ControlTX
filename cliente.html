@@ -211,7 +211,6 @@
       margin-top: 10px;
     }
 
-    /* ==== MODAL IMAGEM ==== */
     .modal {
       display: none;
       position: fixed;
@@ -319,7 +318,7 @@
     </div>
   </main>
 
-  <!-- Modal de visualização de imagem -->
+  <!-- Modal -->
   <div id="modalImagem" class="modal" onclick="fecharModal()">
     <span class="fechar">&times;</span>
     <img class="modal-content" id="imgModal" />
@@ -348,6 +347,7 @@
       }));
     }
 
+    /* --- Função corrigida --- */
     function salvarCliente() {
       const nome = document.getElementById("nome").value.trim();
       const whatsapp = document.getElementById("whatsapp").value.trim();
@@ -362,37 +362,35 @@
       if (clientes.some(c => c.nome.toLowerCase() === nome.toLowerCase()))
         return alert("⚠️ Este cliente já está cadastrado!");
 
-      const readerPerfil = new FileReader();
-      const readerDoc = new FileReader();
-      const readerComp = new FileReader();
+      const cliente = { nome, whatsapp, endereco, fotoPerfil: "", fotoDocumento: "", comprovanteResidencia: "" };
 
-      readerPerfil.onload = e1 => {
-        const perfilImg = e1.target.result;
-        readerDoc.onload = e2 => {
-          const docImg = e2.target.result;
-          readerComp.onload = e3 => {
-            const compImg = e3.target.result;
-            const cliente = {
-              nome,
-              whatsapp,
-              endereco,
-              fotoPerfil: perfilImg,
-              fotoDocumento: docImg,
-              comprovanteResidencia: compImg
-            };
-            clientes.push(cliente);
-            localStorage.setItem("clientes", JSON.stringify(clientes));
-            exibirClientes();
-            limparCampos();
-          };
-          if (comprovanteResidenciaInput.files[0]) readerComp.readAsDataURL(comprovanteResidenciaInput.files[0]);
-          else readerComp.onload();
-        };
-        if (fotoDocumentoInput.files[0]) readerDoc.readAsDataURL(fotoDocumentoInput.files[0]);
-        else readerDoc.onload();
+      const salvarNoStorage = () => {
+        clientes.push(cliente);
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+        exibirClientes();
+        limparCampos();
       };
-      if (fotoPerfilInput.files[0]) readerPerfil.readAsDataURL(fotoPerfilInput.files[0]);
-      else readerPerfil.onload();
+
+      const carregarImagem = (input, callback) => {
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = e => callback(e.target.result);
+          reader.readAsDataURL(input.files[0]);
+        } else {
+          callback("");
+        }
+      };
+
+      carregarImagem(fotoPerfilInput, perfil => {
+        cliente.fotoPerfil = perfil;
+        carregarImagem(fotoDocumentoInput, doc => {
+          cliente.fotoDocumento = doc;
+          carregarImagem(comprovanteResidenciaInput, comp => {
+            cliente.comprovanteResidencia = comp;
+            salvarNoStorage();
+          });
+        });
+      });
     }
 
     function limparCampos() {
