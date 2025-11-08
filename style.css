@@ -1,0 +1,391 @@
+/* =============================
+   ESTILO BASE — LoanControl 2025
+   ============================= */
+
+:root {
+  --sidebar-bg: #0b1121;
+  --sidebar-text: #e0e6f5;
+  --sidebar-hover: #182340;
+  --primary: #1f6feb;
+  --primary-hover: #468bff;
+  --bg-main: #10172b;
+  --bg-card: #141c33;
+  --text: #f1f3f9;
+  --text-muted: #a5acc3;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --radius: 12px;
+  --transition: 0.3s ease;
+}
+
+/* ===== Tema claro ===== */
+body.light {
+  --sidebar-bg: #e9eef9;
+  --sidebar-text: #1a1d29;
+  --sidebar-hover: #cfd7eb;
+  --primary: #0066ff;
+  --primary-hover: #4080ff;
+  --bg-main: #f6f8ff;
+  --bg-card: #fff;
+  --text: #111;
+  --text-muted: #555;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Reset & Global ===== */
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg-main);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: var(--transition);
+}
+
+/* =============================
+   SIDEBAR
+   ============================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 8px var(--shadow);
+  transition: var(--transition);
+  z-index: 10;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar .brand {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.brand-logo {
+  font-size: 1.8em;
+}
+
+.brand-text {
+  margin-left: 10px;
+}
+
+.brand-text h1 {
+  font-size: 1.1em;
+  line-height: 1.2;
+}
+
+.brand-text span {
+  color: var(--primary);
+}
+
+.collapse-btn {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+  background: none;
+  color: var(--sidebar-text);
+  font-size: 1.2em;
+}
+
+.sidebar.collapsed .brand-text,
+.sidebar.collapsed .menu span,
+.sidebar.collapsed .sidebar-footer span {
+  display: none;
+}
+
+/* ====== Menu ====== */
+.menu {
+  flex-grow: 1;
+  padding-top: 10px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  color: var(--sidebar-text);
+  transition: var(--transition);
+}
+
+.menu-item i {
+  margin-right: 12px;
+  font-size: 1.2em;
+  width: 24px;
+  text-align: center;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background: var(--sidebar-hover);
+  color: var(--primary);
+}
+
+.sidebar-footer {
+  padding: 15px;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.theme-toggle {
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.theme-toggle:hover {
+  background: var(--primary-hover);
+}
+
+.version {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.8em;
+  color: var(--text-muted);
+}
+
+/* =============================
+   MAIN CONTENT
+   ============================= */
+.main {
+  margin-left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+
+.sidebar.collapsed ~ .main {
+  margin-left: 70px;
+}
+
+/* ====== Topbar ====== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  box-shadow: 0 2px 8px var(--shadow);
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  font-size: 1.4em;
+  color: var(--text);
+}
+
+.page-title h2 {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.top-actions .btn {
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 6px 14px;
+  font-weight: 600;
+}
+
+.top-actions .btn:hover {
+  background: var(--primary-hover);
+}
+
+/* ====== Content ====== */
+.content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.page {
+  display: none;
+}
+
+.page-active {
+  display: block;
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* ====== Cards ====== */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 10px var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: var(--transition);
+}
+
+.card h3 {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.card .big {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 5px 0;
+}
+
+/* ====== Forms ====== */
+.form-grid {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: var(--text);
+  transition: var(--transition);
+}
+
+body.light input, body.light select {
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #000;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+/* ====== Buttons ====== */
+.btn {
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn.danger {
+  background: #e53935;
+  color: #fff;
+}
+
+.btn.danger:hover {
+  background: #ff4b47;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--primary);
+}
+
+.btn.ghost:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ====== Tabelas e Placeholders ====== */
+.table-placeholder {
+  background: rgba(255,255,255,0.03);
+  border-radius: var(--radius);
+  padding: 15px;
+  min-height: 100px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ====== Configurações ====== */
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.setting span {
+  font-weight: 500;
+}
+
+/* ====== Footer ====== */
+.footer {
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9em;
+  color: var(--text-muted);
+}
+
+/* ====== Responsividade ====== */
+@media (max-width: 900px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: -260px;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main {
+    margin-left: 0;
+  }
+}
