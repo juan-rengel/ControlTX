@@ -1,453 +1,315 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>📘 Empréstimos - MJ Tecnologia</title>
-  <style>
-    /* ====== VARIÁVEIS DE TEMA ====== */
-    :root {
-      --bg: #0a0f1f;
-      --card: #141c2f;
-      --text: #e2e8f0;
-      --accent: #007bff;
-      --sidebar: #10172a;
-      --input-bg: #1e263b;
-    }
-    body.light {
-      --bg: #f4f6fb;
-      --card: #ffffff;
-      --text: #111;
-      --accent: #007bff;
-      --sidebar: #f0f0f0;
-      --input-bg: #f1f1f1;
-    }
-
-    /* ====== BASE ====== */
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 0;
-      transition: 0.4s ease-in-out;
-      display: flex;
-    }
-
-    /* ====== SIDEBAR ====== */
-    .sidebar {
-      width: 240px;
-      background: var(--sidebar);
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.3);
-      z-index: 1000;
-      transition: transform 0.4s ease, opacity 0.3s ease;
-    }
-
-    .sidebar h2 {
-      text-align: center;
-      padding: 20px 0;
-      color: var(--accent);
-      margin: 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .sidebar a {
-      color: var(--text);
-      padding: 12px 20px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-radius: 8px;
-      margin: 6px 10px;
-      transition: 0.3s;
-    }
-
-    .sidebar a:hover, .sidebar a.ativo {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    /* ====== HEADER ====== */
-    header {
-      background: var(--card);
-      color: var(--accent);
-      padding: 15px 25px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      position: fixed;
-      top: 0;
-      left: 240px;
-      right: 0;
-      z-index: 999;
-      transition: left 0.3s ease;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-      color: var(--accent);
-    }
-
-    .menu-toggle {
-      background: none;
-      border: none;
-      color: var(--accent);
-      font-size: 22px;
-      cursor: pointer;
-      margin-right: 10px;
-      display: none;
-    }
-
-    .theme-toggle {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .theme-toggle:hover {
-      opacity: 0.9;
-    }
-
-    /* ====== CONTEÚDO ====== */
-    main {
-      margin-left: 260px;
-      margin-top: 90px;
-      padding: 0 20px;
-      max-width: 1100px;
-      width: 100%;
-      transition: margin-left 0.3s ease;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      margin-bottom: 20px;
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: scale(1.01);
-    }
-
-    h2 {
-      color: var(--accent);
-      margin-top: 0;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background: var(--input-bg);
-      color: var(--text);
-      font-size: 15px;
-      box-sizing: border-box;
-    }
-
-    button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-right: 6px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    .btn-danger {
-      background: red;
-    }
-
-    .btn-secondary {
-      background: #444;
-    }
-
-    .lista-emprestimos {
-      margin-top: 15px;
-    }
-
-    .emprestimo-card {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 10px 15px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .emprestimo-card span {
-      font-size: 15px;
-    }
-
-    /* ====== MOBILE ====== */
-    @media (max-width: 768px) {
-      .menu-toggle {
-        display: block;
-      }
-
-      .sidebar {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-
-      .sidebar.ativo {
-        transform: translateX(0);
-        opacity: 1;
-      }
-
-      header {
-        left: 0;
-      }
-
-      main {
-        margin-left: 0;
-      }
-    }
-
-    /* Overlay escuro quando menu estiver aberto */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 900;
-      display: none;
-      transition: opacity 0.3s ease;
-    }
-    .overlay.ativo {
-      display: block;
-      opacity: 1;
-    }
-
-    .emprestimo-card {
-  background: var(--card);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  transition: 0.3s;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Empréstimos - MJ Control</title>
+<style>
+/* ====== ESTILO GERAL ====== */
+:root {
+  --bg-light: #f4f4f4;
+  --bg-dark: #1e1e1e;
+  --text-light: #1e1e1e;
+  --text-dark: #f4f4f4;
+  --card-light: #fff;
+  --card-dark: #2a2a2a;
+  --accent: #007bff;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --radius: 12px;
 }
-.emprestimo-card:hover {
-  transform: scale(1.02);
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: var(--bg-light);
+  color: var(--text-light);
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+/* ====== MENU LATERAL ====== */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 240px;
+  height: 100vh;
+  background: var(--card-light);
+  box-shadow: var(--shadow);
+  transition: all 0.3s;
+  z-index: 10;
+}
+body.dark .sidebar {
+  background: var(--card-dark);
+}
+.sidebar.close {
+  width: 60px;
+}
+.sidebar h2 {
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+  font-size: 1.2rem;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar ul li {
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.sidebar ul li:hover {
   background: var(--accent);
   color: #fff;
 }
-  </style>
+.toggle-btn {
+  position: absolute;
+  top: 15px;
+  right: -35px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ====== CONTEÚDO ====== */
+.main {
+  margin-left: 260px;
+  padding: 20px;
+  transition: margin-left 0.3s;
+}
+.sidebar.close ~ .main {
+  margin-left: 80px;
+}
+.card {
+  background: var(--card-light);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: background 0.3s;
+}
+body.dark .card {
+  background: var(--card-dark);
+}
+.card h3 {
+  margin-top: 0;
+}
+.btn {
+  padding: 10px 20px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn:hover {
+  opacity: 0.8;
+}
+
+/* ====== LISTA DE EMPRÉSTIMOS ====== */
+.loan-list {
+  display: grid;
+  gap: 15px;
+}
+.loan-card {
+  background: var(--card-light);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 15px;
+}
+body.dark .loan-card {
+  background: var(--card-dark);
+}
+.loan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.loan-header h4 {
+  margin: 0;
+}
+.whatsapp-btn {
+  background: #25d366;
+  border: none;
+  padding: 6px 12px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.action-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.edit-btn, .delete-btn, .reajust-btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+}
+.edit-btn { background: #007bff; }
+.reajust-btn { background: #ffa500; }
+.delete-btn { background: #dc3545; }
+</style>
 </head>
-
 <body>
-  <!-- ====== MENU LATERAL ====== -->
-  <aside class="sidebar" id="sidebar">
-    <h2>📊 MJ</h2>
-    <a href="index.html">🏠 Dashboard</a>
-    <a href="cliente.html">👥 Clientes</a>
-    <a href="emprestimo.html" class="ativo">💸 Empréstimos</a>
-    <a href="config.html">⚙️ Configurações</a>
-  </aside>
-
-  <!-- Overlay -->
-  <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
-
-  <!-- ====== HEADER ====== -->
-  <header>
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-      <h1>💰 Empréstimos - MJ Tecnologia</h1>
-    </div>
-    <button class="theme-toggle" onclick="alternarTema()">🌙 Tema</button>
-  </header>
-
-  <!-- ====== CONTEÚDO ====== -->
-  <main>
-   <div class="card">
-  <h2>Novo Empréstimo</h2>
-
-  <label>Cliente cadastrado:</label>
-  <select id="clienteExistente">
-    <option value="">-- Selecione um cliente cadastrado --</option>
-  </select>
-
-  <label>Ou digite o nome do cliente:</label>
-  <input type="text" id="clienteNome" placeholder="Nome completo do cliente" />
-
-  <label>Valor do Empréstimo (R$):</label>
-  <input type="number" id="valor" placeholder="0,00" step="0.01" />
-
-  <label>Taxa de Juros (% ao dia):</label>
-  <input type="number" id="juros" placeholder="Ex: 2.5" step="0.01" />
-
-  <label>Data do Empréstimo:</label>
-  <input type="date" id="dataEmprestimo" />
-
-  <label>Data de Vencimento:</label>
-  <input type="date" id="dataVencimento" />
-
-  
-  <input id="clienteTelefone" type="tel" placeholder="WhatsApp">
-
-  <label>Observações:</label>
-  <textarea id="observacoes" rows="3" placeholder="Observações adicionais..."></textarea>
-
-  <div style="margin-top:10px;">
-    <button onclick="salvarEmprestimo()">💾 Salvar</button>
-    <button class="btn-danger">Reajustar</button>
-    <button class="btn-secondary" onclick="limparCampos()">🧹 Limpar</button>
+  <div class="sidebar">
+    <button class="toggle-btn" id="toggleMenu">☰</button>
+    <h2>MJ Control</h2>
+    <ul>
+      <li onclick="window.location='dashboard.html'">📊 Dashboard</li>
+      <li onclick="window.location='cliente.html'">👤 Clientes</li>
+      <li onclick="window.location='emprestimo.html'">💰 Empréstimos</li>
+    </ul>
   </div>
-</div>
 
-    <div class="card lista-emprestimos">
-      <h2>📋 Empréstimos Registrados</h2>
-      <div id="listaEmprestimos"></div>
+  <div class="main">
+    <h1>Gerenciar Empréstimos</h1>
+
+    <!-- ====== FORMULÁRIO ====== -->
+    <div class="card">
+      <h3>Novo Empréstimo</h3>
+      <form id="loanForm">
+        <input type="hidden" id="editIndex">
+        <label>Nome do Cliente</label>
+        <input type="text" id="clienteNome" readonly style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;">
+        
+        <label>WhatsApp</label>
+        <input type="text" id="clienteWhatsapp" readonly style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;">
+        
+        <label>Valor do Empréstimo</label>
+        <input type="number" id="valor" required style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;">
+
+        <label>Data</label>
+        <input type="date" id="data" required style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;">
+        
+        <label>Observações</label>
+        <textarea id="obs" rows="3" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;"></textarea>
+
+        <button class="btn" type="submit">💾 Salvar Empréstimo</button>
+      </form>
     </div>
-  </main>
 
-  <script>
-    // ====== TEMA DARK/LIGHT ======
-    function alternarTema() {
-      document.body.classList.toggle("light");
-      const temaAtual = document.body.classList.contains("light") ? "light" : "dark";
-      localStorage.setItem("tema", temaAtual);
-      atualizarIconeTema();
-    }
+    <!-- ====== LISTA DE EMPRÉSTIMOS ====== -->
+    <h2>Empréstimos Registrados</h2>
+    <div class="loan-list" id="loanList"></div>
+  </div>
 
-    function atualizarIconeTema() {
-      const botao = document.querySelector(".theme-toggle");
-      botao.textContent = document.body.classList.contains("light") ? "☀️ Tema" : "🌙 Tema";
-    }
+<script>
+// ====== MENU ======
+const sidebar = document.querySelector(".sidebar");
+const toggleMenu = document.getElementById("toggleMenu");
+toggleMenu.addEventListener("click", () => sidebar.classList.toggle("close"));
 
-    window.onload = () => {
-      const temaSalvo = localStorage.getItem("tema");
-      if (temaSalvo === "light") document.body.classList.add("light");
-      atualizarIconeTema();
-    };
+// ====== DARK MODE AUTO ======
+if (new Date().getHours() >= 18 || new Date().getHours() < 6) document.body.classList.add("dark");
 
-    // ====== MENU LATERAL MOBILE ======
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
+// ====== DADOS DO CLIENTE VINDOS DE cliente.html ======
+const params = new URLSearchParams(window.location.search);
+const clienteNome = params.get("nome") || "";
+const clienteWhatsapp = params.get("whatsapp") || "";
 
-    function toggleMenu() {
-      sidebar.classList.toggle("ativo");
-      overlay.classList.toggle("ativo");
-    }
+document.getElementById("clienteNome").value = clienteNome;
+document.getElementById("clienteWhatsapp").value = clienteWhatsapp;
 
-    function fecharMenu() {
-      sidebar.classList.remove("ativo");
-      overlay.classList.remove("ativo");
-    }
+// ====== GERENCIAMENTO DE EMPRÉSTIMOS ======
+const loanForm = document.getElementById("loanForm");
+const loanList = document.getElementById("loanList");
 
-    // Fecha o menu se a tela for redimensionada para desktop
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 768) fecharMenu();
-    });
-
-    // ====== WHATSAPP ======
-    function gerarWhatsApp(cliente, valor) {
-      const msg = `Olá ${cliente}, seu empréstimo de R$${valor} foi registrado com sucesso! 💰`;
-      const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-      window.open(url, "_blank");
-    }
-
-    // ====== SALVAR E LIMPAR ======
-    function salvarEmprestimo() {
-      const cliente = document.getElementById("cliente").value.trim();
-      const valor = document.getElementById("valor").value.trim();
-
-      if (!cliente || !valor) {
-        alert("⚠️ Preencha os campos obrigatórios!");
-        return;
-      }
-
-      const lista = document.getElementById("listaEmprestimos");
-      const card = document.createElement("div");
-      card.className = "emprestimo-card";
-      card.innerHTML = `
-        <span>👤 ${cliente} - 💵 R$${valor}</span>
-        <button onclick="gerarWhatsApp('${cliente}', '${valor}')">📱 WhatsApp</button>
-      `;
-      lista.appendChild(card);
-      limparCampos();
-    }
-
-    function limparCampos() {
-      document.getElementById("cliente").value = "";
-      document.getElementById("valor").value = "";
-      document.getElementById("juros").value = "";
-      document.getElementById("dataEmprestimo").value = "";
-      document.getElementById("dataVencimento").value = "";
-      document.getElementById("observacoes").value = "";
-    }
-
-    // ====== CARREGAR CLIENTES CADASTRADOS ======
-function carregarClientes() {
-  const select = document.getElementById("clienteExistente");
-  const clientesSalvos = JSON.parse(localStorage.getItem("clientes")) || [];
-
-  clientesSalvos.forEach(c => {
-    const option = document.createElement("option");
-    option.value = c.nome;
-    option.textContent = c.nome;
-    select.appendChild(option);
-  });
-
-  select.addEventListener("change", () => {
-    const valor = select.value;
-    document.getElementById("cliente").value = valor;
+function carregarEmprestimos() {
+  const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
+  loanList.innerHTML = "";
+  emprestimos.forEach((e, i) => {
+    const card = document.createElement("div");
+    card.classList.add("loan-card");
+    card.innerHTML = `
+      <div class="loan-header">
+        <h4>${e.nome}</h4>
+        <button class="whatsapp-btn" onclick="window.open('https://wa.me/${e.whatsapp}?text=Olá%20${e.nome},%20sobre%20seu%20empréstimo%20de%20R$${e.valor}', '_blank')">WhatsApp</button>
+      </div>
+      <p><strong>Valor:</strong> R$ ${e.valor}</p>
+      <p><strong>Data:</strong> ${e.data}</p>
+      <p><strong>Observações:</strong> ${e.obs}</p>
+      <div class="action-btns">
+        <button class="edit-btn" onclick="editarEmprestimo(${i})">📝 Editar</button>
+        <button class="reajust-btn" onclick="reajustarValor(${i})">💰 Reajustar</button>
+        <button class="delete-btn" onclick="excluirEmprestimo(${i})">❌ Excluir</button>
+      </div>
+    `;
+    loanList.appendChild(card);
   });
 }
 
-document.querySelectorAll(".sidebar a").forEach(link => {
-  link.addEventListener("click", () => fecharMenu());
-});
+loanForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
+  const editIndex = document.getElementById("editIndex").value;
 
-// Preenche automaticamente o nome do cliente vindo da página anterior
-window.addEventListener("DOMContentLoaded", () => {
-  const clienteSelecionado = localStorage.getItem("clienteSelecionado");
-  if (clienteSelecionado) {
-    document.getElementById("cliente").value = clienteSelecionado;
-    document.getElementById("clienteExistente").value = clienteSelecionado;
-    localStorage.removeItem("clienteSelecionado"); // limpa depois
+  const novo = {
+    nome: document.getElementById("clienteNome").value,
+    whatsapp: document.getElementById("clienteWhatsapp").value,
+    valor: document.getElementById("valor").value,
+    data: document.getElementById("data").value,
+    obs: document.getElementById("obs").value
+  };
+
+  if (editIndex !== "") {
+    emprestimos[editIndex] = novo;
+    document.getElementById("editIndex").value = "";
+  } else {
+    emprestimos.push(novo);
   }
+
+  localStorage.setItem("emprestimos", JSON.stringify(emprestimos));
+  loanForm.reset();
+  carregarEmprestimos();
 });
 
+function editarEmprestimo(i) {
+  const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
+  const e = emprestimos[i];
+  document.getElementById("clienteNome").value = e.nome;
+  document.getElementById("clienteWhatsapp").value = e.whatsapp;
+  document.getElementById("valor").value = e.valor;
+  document.getElementById("data").value = e.data;
+  document.getElementById("obs").value = e.obs;
+  document.getElementById("editIndex").value = i;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-  const dados = JSON.parse(localStorage.getItem('emprestimoCliente'));
-  if (dados) {
-    const nomeInput = document.getElementById('clienteNome');
-    const telInput = document.getElementById('clienteTelefone');
-    if (nomeInput) {
-      nomeInput.value = dados.nome || '';
-      nomeInput.readOnly = true;
-    }
-    if (telInput) {
-      telInput.value = dados.telefone || '';
-      telInput.readOnly = true;
-    }
+function reajustarValor(i) {
+  const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
+  const novoValor = prompt("Novo valor do empréstimo (R$):", emprestimos[i].valor);
+  if (novoValor && !isNaN(novoValor)) {
+    emprestimos[i].valor = novoValor;
+    localStorage.setItem("emprestimos", JSON.stringify(emprestimos));
+    carregarEmprestimos();
   }
-});
+}
 
-  </script>
+function excluirEmprestimo(i) {
+  if (confirm("Deseja realmente excluir este empréstimo?")) {
+    const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
+    emprestimos.splice(i, 1);
+    localStorage.setItem("emprestimos", JSON.stringify(emprestimos));
+    carregarEmprestimos();
+  }
+}
+
+carregarEmprestimos();
+</script>
 </body>
 </html>
