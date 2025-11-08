@@ -1,350 +1,351 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>👥 Clientes - MJ Tecnologia</title>
-  <style>
-    :root {
-      --bg: #0a0f1f;
-      --card: #141c2f;
-      --text: #e2e8f0;
-      --accent: #007bff;
-      --sidebar: #10172a;
-      --input-bg: #1e263b;
-    }
-
-    body.light {
-      --bg: #f4f6fb;
-      --card: #ffffff;
-      --text: #111;
-      --accent: #007bff;
-      --sidebar: #f0f0f0;
-      --input-bg: #f1f1f1;
-    }
-
-    body {
-      font-family: "Poppins", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-      display: flex;
-      transition: 0.4s ease;
-    }
-
-    .sidebar {
-      width: 240px;
-      background: var(--sidebar);
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
-      transition: 0.3s;
-    }
-
-    .sidebar h2 {
-      text-align: center;
-      padding: 20px 0;
-      color: var(--accent);
-      margin: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .sidebar a {
-      color: var(--text);
-      padding: 12px 20px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-radius: 8px;
-      margin: 6px 10px;
-      transition: 0.3s;
-    }
-
-    .sidebar a:hover,
-    .sidebar a.ativo {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .sidebar.fechar {
-      transform: translateX(-100%);
-    }
-
-    header {
-      background: var(--card);
-      color: var(--accent);
-      padding: 15px 25px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      position: fixed;
-      top: 0;
-      left: 240px;
-      right: 0;
-      z-index: 999;
-      transition: 0.3s;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-      color: var(--accent);
-    }
-
-    .theme-toggle {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .theme-toggle:hover {
-      opacity: 0.9;
-    }
-
-    .menu-btn {
-      display: none;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 18px;
-      margin-right: 10px;
-    }
-
-    main {
-      margin-left: 260px;
-      margin-top: 90px;
-      padding: 0 20px;
-      max-width: 1100px;
-      width: 100%;
-      transition: 0.3s;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      margin-bottom: 20px;
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: scale(1.01);
-    }
-
-    h2 {
-      color: var(--accent);
-      margin-top: 0;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background: var(--input-bg);
-      color: var(--text);
-      font-size: 15px;
-    }
-
-    button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-right: 6px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    .btn-danger {
-      background: red;
-    }
-
-    .cliente-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .cliente-info {
-      flex: 1;
-    }
-
-    .cliente-botoes {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-      .sidebar.abrir {
-        transform: translateX(0);
-      }
-      header {
-        left: 0;
-      }
-      .menu-btn {
-        display: inline-block;
-      }
-      main {
-        margin-left: 0;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>💸 Empréstimos - MJ Tecnologia</title>
+<style>
+:root {
+  --bg: #0a0f1f;
+  --card: #141c2f;
+  --text: #e2e8f0;
+  --accent: #007bff;
+  --sidebar: #10172a;
+  --input-bg: #1e263b;
+}
+body.light {
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --text: #111;
+  --accent: #007bff;
+  --sidebar: #f0f0f0;
+  --input-bg: #f1f1f1;
+}
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  display: flex;
+  transition: 0.4s ease;
+}
+.sidebar {
+  width: 240px;
+  background: var(--sidebar);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: 0.3s;
+}
+.sidebar h2 {
+  text-align: center;
+  padding: 20px 0;
+  color: var(--accent);
+  margin: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.sidebar a {
+  color: var(--text);
+  padding: 12px 20px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  margin: 6px 10px;
+  transition: 0.3s;
+}
+.sidebar a:hover, .sidebar a.ativo {
+  background: var(--accent);
+  color: #fff;
+}
+.sidebar.fechar {
+  transform: translateX(-100%);
+}
+header {
+  background: var(--card);
+  color: var(--accent);
+  padding: 15px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  position: fixed;
+  top: 0;
+  left: 240px;
+  right: 0;
+  z-index: 999;
+  transition: 0.3s;
+}
+header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+.menu-btn {
+  display: none;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 10px;
+}
+.theme-toggle {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.theme-toggle:hover { opacity: 0.9; }
+main {
+  margin-left: 260px;
+  margin-top: 90px;
+  padding: 0 20px;
+  max-width: 1100px;
+  width: 100%;
+  transition: 0.3s;
+}
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+.card:hover { transform: scale(1.01); }
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 15px;
+}
+button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 6px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+button:hover { opacity: 0.9; }
+.btn-danger { background: red; }
+.btn-green { background: green; }
+.emprestimo-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+.emprestimo-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.emprestimo-header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+}
+.emprestimo-info {
+  flex: 1;
+}
+.emprestimo-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.abrir{transform:translateX(0);}
+  header{left:0;}
+  .menu-btn{display:inline-block;}
+  main{margin-left:0;}
+}
+</style>
 </head>
-
 <body>
   <aside class="sidebar" id="sidebar">
     <h2>📊 MJ</h2>
-    <a href="dashboard.html">🏠 Dashboard</a>
-    <a href="clientes.html" class="ativo">👥 Clientes</a>
-    <a href="emprestimo.html">💸 Empréstimos</a>
+    <a href="index.html">🏠 Dashboard</a>
+    <a href="cliente.html">👥 Clientes</a>
+    <a href="emprestimo.html" class="ativo">💸 Empréstimos</a>
     <a href="config.html">⚙️ Configurações</a>
   </aside>
 
   <header>
     <div style="display:flex;align-items:center;gap:10px;">
       <button class="menu-btn" onclick="toggleMenu()">☰</button>
-      <h1>👥 Clientes - MJ Tecnologia</h1>
+      <h1>💸 Empréstimos - MJ Tecnologia</h1>
     </div>
     <button class="theme-toggle" onclick="alternarTema()">🌙 Tema</button>
   </header>
 
   <main>
     <div class="card">
-      <h2>Novo Cliente</h2>
-      <input type="text" id="nome" placeholder="Nome do cliente" />
-      <input type="text" id="whatsapp" placeholder="WhatsApp" />
-      <button onclick="salvarCliente()">💾 Salvar</button>
+      <h2>Novo Empréstimo</h2>
+      <input type="text" id="nomeCliente" placeholder="Nome do Cliente" readonly>
+      <input type="text" id="whatsappCliente" placeholder="WhatsApp" readonly>
+      <input type="text" id="enderecoCliente" placeholder="Endereço" readonly>
+      <input type="file" id="fotoDocumento" accept="image/*">
+      <input type="file" id="comprovanteResidencia" accept="image/*">
+      <input type="number" id="valor" placeholder="Valor do Empréstimo">
+      <input type="date" id="dataVencimento" placeholder="Data de Vencimento">
+      <button onclick="salvarEmprestimo()">💾 Salvar</button>
       <button class="btn-danger" onclick="limparCampos()">🧹 Limpar</button>
     </div>
 
     <div class="card">
-      <h2>📋 Clientes Cadastrados</h2>
-      <div id="listaClientes"></div>
+      <h2>🔍 Buscar Empréstimos</h2>
+      <input type="text" id="filtroBusca" placeholder="Digite o nome do cliente..." oninput="filtrarEmprestimos()">
+    </div>
+
+    <div class="card">
+      <h2>📋 Empréstimos Registrados</h2>
+      <div id="listaEmprestimos"></div>
     </div>
   </main>
 
-  <script>
-    function alternarTema() {
-      document.body.classList.toggle("light");
-      const tema = document.body.classList.contains("light") ? "light" : "dark";
-      localStorage.setItem("tema", tema);
-      atualizarIconeTema();
-    }
+<script>
+function alternarTema(){
+  document.body.classList.toggle("light");
+  const tema=document.body.classList.contains("light")?"light":"dark";
+  localStorage.setItem("tema",tema);
+  atualizarIconeTema();
+}
+function atualizarIconeTema(){
+  const btn=document.querySelector(".theme-toggle");
+  btn.textContent=document.body.classList.contains("light")?"☀️ Tema":"🌙 Tema";
+}
+function toggleMenu(){
+  document.getElementById("sidebar").classList.toggle("abrir");
+}
 
-    function atualizarIconeTema() {
-      const btn = document.querySelector(".theme-toggle");
-      btn.textContent = document.body.classList.contains("light") ? "☀️ Tema" : "🌙 Tema";
-    }
+// --- Dados vindos da página Clientes ---
+window.onload = ()=>{
+  const tema=localStorage.getItem("tema");
+  if(tema==="light")document.body.classList.add("light");
+  atualizarIconeTema();
 
-    function toggleMenu() {
-      document.getElementById("sidebar").classList.toggle("abrir");
-    }
+  const temp=JSON.parse(localStorage.getItem("emprestimoTemp"));
+  if(temp){
+    document.getElementById("nomeCliente").value=temp.nome||"";
+    document.getElementById("whatsappCliente").value=temp.whatsapp||"";
+  }
+  exibirEmprestimos();
+};
 
-    function salvarCliente() {
-      const nome = document.getElementById("nome").value.trim();
-      const whatsapp = document.getElementById("whatsapp").value.trim();
-      if (!nome) {
-        alert("⚠️ Informe o nome do cliente!");
-        return;
-      }
-      const cliente = { nome, whatsapp };
-      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      clientes.push(cliente);
-      localStorage.setItem("clientes", JSON.stringify(clientes));
-      exibirClientes();
-      limparCampos();
-    }
+function salvarEmprestimo(){
+  const nome=document.getElementById("nomeCliente").value.trim();
+  const whatsapp=document.getElementById("whatsappCliente").value.trim();
+  const endereco=document.getElementById("enderecoCliente").value.trim();
+  const valor=document.getElementById("valor").value.trim();
+  const dataVenc=document.getElementById("dataVencimento").value.trim();
+  const docFile=document.getElementById("fotoDocumento").files[0];
+  const compFile=document.getElementById("comprovanteResidencia").files[0];
 
-    function limparCampos() {
-      document.getElementById("nome").value = "";
-      document.getElementById("whatsapp").value = "";
-    }
+  if(!nome || !valor){ alert("⚠️ Preencha nome e valor!"); return; }
 
-    function exibirClientes() {
-      const lista = document.getElementById("listaClientes");
-      lista.innerHTML = "";
-      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      clientes.forEach((c, i) => {
-        const div = document.createElement("div");
-        div.className = "cliente-card";
-        div.innerHTML = `
-          <div class="cliente-info">
-            <strong>👤 ${c.nome}</strong><br>
-            📱 ${c.whatsapp || "Sem número"}
-          </div>
-          <div class="cliente-botoes">
-            <button onclick="solicitarEmprestimo('${c.nome}','${c.whatsapp}')">💸 Solicitar</button>
-            <button onclick="editarCliente(${i})">✏️ Editar</button>
-            <button class="btn-danger" onclick="excluirCliente(${i})">🗑️ Excluir</button>
-          </div>
-        `;
-        lista.appendChild(div);
-      });
-    }
+  const leitorDoc = docFile ? getBase64(docFile) : Promise.resolve("");
+  const leitorComp = compFile ? getBase64(compFile) : Promise.resolve("");
 
-    function solicitarEmprestimo(nome, whatsapp) {
-      localStorage.setItem("emprestimoTemp", JSON.stringify({ nome, whatsapp }));
-      window.location.href = "emprestimo.html";
-    }
-
-    function editarCliente(i) {
-      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      const c = clientes[i];
-      document.getElementById("nome").value = c.nome;
-      document.getElementById("whatsapp").value = c.whatsapp;
-      clientes.splice(i, 1);
-      localStorage.setItem("clientes", JSON.stringify(clientes));
-      exibirClientes();
-    }
-
-    function excluirCliente(i) {
-      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      if (confirm("Excluir este cliente?")) {
-        clientes.splice(i, 1);
-        localStorage.setItem("clientes", JSON.stringify(clientes));
-        exibirClientes();
-      }
-    }
-
-    window.onload = () => {
-      const tema = localStorage.getItem("tema");
-      if (tema === "light") document.body.classList.add("light");
-      atualizarIconeTema();
-      exibirClientes();
-    };
-  </script>
+  Promise.all([leitorDoc, leitorComp]).then(([fotoDoc, fotoComp])=>{
+    const novo = { nome, whatsapp, endereco, valor, dataVenc, fotoDoc, fotoComp };
+    const lista = JSON.parse(localStorage.getItem("emprestimos"))||[];
+    lista.push(novo);
+    localStorage.setItem("emprestimos",JSON.stringify(lista));
+    exibirEmprestimos();
+    limparCampos();
+  });
+}
+function getBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=error=>reject(error);
+    reader.readAsDataURL(file);
+  });
+}
+function limparCampos(){
+  document.getElementById("valor").value="";
+  document.getElementById("dataVencimento").value="";
+  document.getElementById("fotoDocumento").value="";
+  document.getElementById("comprovanteResidencia").value="";
+}
+function exibirEmprestimos(listaFiltrada){
+  const lista = listaFiltrada || JSON.parse(localStorage.getItem("emprestimos")) || [];
+  const div=document.getElementById("listaEmprestimos");
+  div.innerHTML="";
+  lista.forEach((e,i)=>{
+    const card=document.createElement("div");
+    card.className="emprestimo-card";
+    card.innerHTML=`
+      <div class="emprestimo-header">
+        <img src="${e.fotoDoc || 'https://via.placeholder.com/50'}" alt="Doc">
+        <div class="emprestimo-info">
+          <strong>${e.nome}</strong><br>
+          📱 ${e.whatsapp || 'Sem número'}<br>
+          💰 R$ ${e.valor} - Vence em: ${e.dataVenc||'--'}
+        </div>
+      </div>
+      <div class="emprestimo-actions">
+        <button onclick="editarEmprestimo(${i})">✏️ Editar</button>
+        <button class="btn-green" onclick="reajustarEmprestimo(${i})">🔁 Reajustar</button>
+        <button class="btn-danger" onclick="excluirEmprestimo(${i})">🗑️ Excluir</button>
+      </div>`;
+    div.appendChild(card);
+  });
+}
+function filtrarEmprestimos(){
+  const termo=document.getElementById("filtroBusca").value.toLowerCase();
+  const lista=JSON.parse(localStorage.getItem("emprestimos"))||[];
+  const filtrada=lista.filter(e=>e.nome.toLowerCase().includes(termo));
+  exibirEmprestimos(filtrada);
+}
+function editarEmprestimo(i){
+  const lista=JSON.parse(localStorage.getItem("emprestimos"))||[];
+  const e=lista[i];
+  document.getElementById("nomeCliente").value=e.nome;
+  document.getElementById("whatsappCliente").value=e.whatsapp;
+  document.getElementById("enderecoCliente").value=e.endereco;
+  document.getElementById("valor").value=e.valor;
+  document.getElementById("dataVencimento").value=e.dataVenc;
+  lista.splice(i,1);
+  localStorage.setItem("emprestimos",JSON.stringify(lista));
+  exibirEmprestimos();
+}
+function excluirEmprestimo(i){
+  const lista=JSON.parse(localStorage.getItem("emprestimos"))||[];
+  if(confirm("Deseja excluir este empréstimo?")){
+    lista.splice(i,1);
+    localStorage.setItem("emprestimos",JSON.stringify(lista));
+    exibirEmprestimos();
+  }
+}
+function reajustarEmprestimo(i){
+  alert("💡 Função de reajuste futura — poderá recalcular juros automaticamente!");
+}
+</script>
 </body>
 </html>

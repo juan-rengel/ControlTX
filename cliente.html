@@ -1,197 +1,231 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>👥 Clientes - MJ Tecnologia</title>
-<style>
-  :root {
-    --bg: #0a0f1f;
-    --card: #141c2f;
-    --text: #e2e8f0;
-    --accent: #007bff;
-    --sidebar: #10172a;
-    --input-bg: #1e263b;
-  }
-  body.light {
-    --bg: #f4f6fb;
-    --card: #ffffff;
-    --text: #111;
-    --accent: #007bff;
-    --sidebar: #f0f0f0;
-    --input-bg: #f1f1f1;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>👥 Clientes - MJ Tecnologia</title>
+  <style>
+    :root {
+      --bg: #0a0f1f;
+      --card: #141c2f;
+      --text: #e2e8f0;
+      --accent: #007bff;
+      --sidebar: #10172a;
+      --input-bg: #1e263b;
+    }
 
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    margin: 0;
-    display: flex;
-    transition: 0.4s ease;
-  }
+    body.light {
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --text: #111;
+      --accent: #007bff;
+      --sidebar: #f0f0f0;
+      --input-bg: #f1f1f1;
+    }
 
-  /* ===== SIDEBAR ===== */
-  .sidebar {
-    width: 240px;
-    background: var(--sidebar);
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.3);
-    z-index: 1000;
-    transition: transform 0.4s ease;
-  }
+    body {
+      font-family: "Poppins", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      display: flex;
+      transition: 0.4s ease;
+    }
 
-  .sidebar h2 {
-    text-align: center;
-    padding: 20px 0;
-    color: var(--accent);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
+    .sidebar {
+      width: 240px;
+      background: var(--sidebar);
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transition: 0.3s;
+    }
 
-  .sidebar a {
-    color: var(--text);
-    padding: 12px 20px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-radius: 8px;
-    margin: 6px 10px;
-    transition: 0.3s;
-  }
+    .sidebar h2 {
+      text-align: center;
+      padding: 20px 0;
+      color: var(--accent);
+      margin: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-  .sidebar a:hover, .sidebar a.ativo {
-    background: var(--accent);
-    color: #fff;
-  }
+    .sidebar a {
+      color: var(--text);
+      padding: 12px 20px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 8px;
+      margin: 6px 10px;
+      transition: 0.3s;
+    }
 
-  /* ===== HEADER ===== */
-  header {
-    background: var(--card);
-    color: var(--accent);
-    padding: 15px 25px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: fixed;
-    top: 0;
-    left: 240px;
-    right: 0;
-    z-index: 999;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: left 0.3s ease;
-  }
+    .sidebar a:hover,
+    .sidebar a.ativo {
+      background: var(--accent);
+      color: #fff;
+    }
 
-  .menu-toggle {
-    background: none;
-    border: none;
-    color: var(--accent);
-    font-size: 22px;
-    cursor: pointer;
-    margin-right: 10px;
-    display: none;
-  }
+    .sidebar.fechar {
+      transform: translateX(-100%);
+    }
 
-  .theme-toggle {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 14px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-  }
+    header {
+      background: var(--card);
+      color: var(--accent);
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 0;
+      left: 240px;
+      right: 0;
+      z-index: 999;
+      transition: 0.3s;
+    }
 
-  main {
-    margin-left: 260px;
-    margin-top: 90px;
-    padding: 0 20px;
-    max-width: 1100px;
-    width: 100%;
-    transition: margin-left 0.3s ease;
-  }
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--accent);
+    }
 
-  .card {
-    background: var(--card);
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    margin-bottom: 20px;
-  }
+    .theme-toggle {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
 
-  h2 {
-    color: var(--accent);
-  }
+    .theme-toggle:hover {
+      opacity: 0.9;
+    }
 
-  input, select, textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 6px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: var(--input-bg);
-    color: var(--text);
-    font-size: 15px;
-  }
+    .menu-btn {
+      display: none;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 18px;
+      margin-right: 10px;
+    }
 
-  button {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-right: 6px;
-    font-weight: bold;
-    transition: 0.3s;
-  }
+    main {
+      margin-left: 260px;
+      margin-top: 90px;
+      padding: 0 20px;
+      max-width: 1100px;
+      width: 100%;
+      transition: 0.3s;
+    }
 
-  .btn-danger { background: red; }
-  .btn-secondary { background: #444; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+      transition: 0.3s;
+    }
 
-  .client-card {
-    background: rgba(255,255,255,0.05);
-    border-radius: 10px;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-  }
+    .card:hover {
+      transform: scale(1.01);
+    }
 
-  .client-card span {
-    font-size: 15px;
-  }
+    h2 {
+      color: var(--accent);
+      margin-top: 0;
+    }
 
-  /* MOBILE */
-  @media (max-width: 768px) {
-    .menu-toggle { display: block; }
-    .sidebar { transform: translateX(-100%); opacity: 0; }
-    .sidebar.ativo { transform: translateX(0); opacity: 1; }
-    header { left: 0; }
-    main { margin-left: 0; }
-  }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 15px;
+    }
 
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 900;
-    display: none;
-  }
-  .overlay.ativo { display: block; }
-</style>
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 6px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .btn-danger {
+      background: red;
+    }
+
+    .cliente-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cliente-info {
+      flex: 1;
+    }
+
+    .cliente-botoes {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.abrir {
+        transform: translateX(0);
+      }
+      header {
+        left: 0;
+      }
+      .menu-btn {
+        display: inline-block;
+      }
+      main {
+        margin-left: 0;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <aside class="sidebar" id="sidebar">
+  <aside class="sidebar" id="s1idebar">
     <h2>📊 MJ</h2>
     <a href="index.html">🏠 Dashboard</a>
     <a href="cliente.html" class="ativo">👥 Clientes</a>
@@ -199,11 +233,9 @@
     <a href="config.html">⚙️ Configurações</a>
   </aside>
 
-  <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
-
   <header>
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
       <h1>👥 Clientes - MJ Tecnologia</h1>
     </div>
     <button class="theme-toggle" onclick="alternarTema()">🌙 Tema</button>
@@ -212,20 +244,15 @@
   <main>
     <div class="card">
       <h2>Novo Cliente</h2>
-      <label>Nome:</label>
-      <input type="text" id="nome" placeholder="Nome completo" />
-      <label>Telefone (WhatsApp):</label>
-      <input type="text" id="telefone" placeholder="(DDD) 00000-0000" />
-      <label>Endereço:</label>
-      <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade" />
-      <label>CPF:</label>
-      <input type="text" id="cpf" placeholder="000.000.000-00" />
-      <label>Foto Documento:</label>
-      <input type="file" id="documento" />
-      <label>Comprovante de Residência:</label>
-      <input type="file" id="residencia" />
+      <input type="text" id="nome" placeholder="Nome do cliente" />
+      <input type="text" id="whatsapp" placeholder="WhatsApp" />
+      <input type="text" id="endereco" placeholder="Endereço (opcional)" />
+      <label>📄 Foto Documento:</label>
+      <input type="file" id="fotoDocumento" accept="image/*" />
+      <label>🏠 Comprovante de Residência:</label>
+      <input type="file" id="comprovanteResidencia" accept="image/*" />
       <button onclick="salvarCliente()">💾 Salvar</button>
-      <button class="btn-secondary" onclick="limparCampos()">🧹 Limpar</button>
+      <button class="btn-danger" onclick="limparCampos()">🧹 Limpar</button>
     </div>
 
     <div class="card">
@@ -235,100 +262,121 @@
   </main>
 
   <script>
-    // ====== THEME ======
     function alternarTema() {
       document.body.classList.toggle("light");
-      localStorage.setItem("tema", document.body.classList.contains("light") ? "light" : "dark");
+      const tema = document.body.classList.contains("light") ? "light" : "dark";
+      localStorage.setItem("tema", tema);
+      atualizarIconeTema();
+    }
+
+    function atualizarIconeTema() {
+      const btn = document.querySelector(".theme-toggle");
+      btn.textContent = document.body.classList.contains("light") ? "☀️ Tema" : "🌙 Tema";
     }
 
     function toggleMenu() {
-      sidebar.classList.toggle("ativo");
-      overlay.classList.toggle("ativo");
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("abrir");
+      // Fecha o menu automaticamente ao clicar em item no mobile
+      const links = sidebar.querySelectorAll("a");
+      links.forEach(link => link.addEventListener("click", () => {
+        if (window.innerWidth <= 768) sidebar.classList.remove("abrir");
+      }));
     }
-    function fecharMenu() {
-      sidebar.classList.remove("ativo");
-      overlay.classList.remove("ativo");
-    }
-
-    // ====== CLIENTES ======
-    let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
 
     function salvarCliente() {
-      const nome = nomeEl.value.trim();
-      const telefone = telefoneEl.value.trim();
-      const endereco = enderecoEl.value.trim();
-      const cpf = cpfEl.value.trim();
-      if (!nome || !telefone) return alert("Preencha os campos obrigatórios!");
+      const nome = document.getElementById("nome").value.trim();
+      const whatsapp = document.getElementById("whatsapp").value.trim();
+      const endereco = document.getElementById("endereco").value.trim();
+      const fotoDocumento = document.getElementById("fotoDocumento").value;
+      const comprovanteResidencia = document.getElementById("comprovanteResidencia").value;
 
-      const novo = { nome, telefone, endereco, cpf };
-      clientes.push(novo);
+      if (!nome) {
+        alert("⚠️ Informe o nome do cliente!");
+        return;
+      }
+
+      if (whatsapp && !/^\d{8,15}$/.test(whatsapp)) {
+        alert("⚠️ Informe um número de WhatsApp válido!");
+        return;
+      }
+
+      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      if (clientes.some(c => c.nome.toLowerCase() === nome.toLowerCase())) {
+        alert("⚠️ Este cliente já está cadastrado!");
+        return;
+      }
+
+      const cliente = { nome, whatsapp, endereco, fotoDocumento, comprovanteResidencia };
+      clientes.push(cliente);
       localStorage.setItem("clientes", JSON.stringify(clientes));
-      renderClientes();
+      exibirClientes();
       limparCampos();
     }
 
     function limparCampos() {
-      nomeEl.value = "";
-      telefoneEl.value = "";
-      enderecoEl.value = "";
-      cpfEl.value = "";
+      document.getElementById("nome").value = "";
+      document.getElementById("whatsapp").value = "";
+      document.getElementById("endereco").value = "";
+      document.getElementById("fotoDocumento").value = "";
+      document.getElementById("comprovanteResidencia").value = "";
     }
 
-    const nomeEl = document.getElementById("nome");
-    const telefoneEl = document.getElementById("telefone");
-    const enderecoEl = document.getElementById("endereco");
-    const cpfEl = document.getElementById("cpf");
-
-    function renderClientes() {
+    function exibirClientes() {
       const lista = document.getElementById("listaClientes");
       lista.innerHTML = "";
+      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
       clientes.forEach((c, i) => {
         const div = document.createElement("div");
-        div.className = "client-card";
+        div.className = "cliente-card";
         div.innerHTML = `
-          <span>👤 ${c.nome} - 📞 ${c.telefone}</span>
-          <div>
+          <div class="cliente-info">
+            <strong>👤 ${c.nome}</strong><br>
+            📱 ${c.whatsapp || "Sem número"}<br>
+            📍 ${c.endereco || "Sem endereço"}
+          </div>
+          <div class="cliente-botoes">
+            <button onclick="window.open('https://wa.me/55${c.whatsapp}','_blank')">💬 WhatsApp</button>
+            <button onclick="solicitarEmprestimo('${c.nome}','${c.whatsapp}')">💸 Solicitar</button>
             <button onclick="editarCliente(${i})">✏️ Editar</button>
             <button class="btn-danger" onclick="excluirCliente(${i})">🗑️ Excluir</button>
-            <button onclick="whatsCliente('${c.telefone}', '${c.nome}')">📱 WhatsApp</button>
-            <button onclick="solicitarEmprestimo(${i})">💸 Solicitar</button>
           </div>
         `;
         lista.appendChild(div);
       });
     }
 
-    function editarCliente(i) {
-      const c = clientes[i];
-      nomeEl.value = c.nome;
-      telefoneEl.value = c.telefone;
-      enderecoEl.value = c.endereco;
-      cpfEl.value = c.cpf;
-      clientes.splice(i, 1);
-      localStorage.setItem("clientes", JSON.stringify(clientes));
-      renderClientes();
-    }
-
-    function excluirCliente(i) {
-      if (confirm("Excluir este cliente?")) {
-        clientes.splice(i, 1);
-        localStorage.setItem("clientes", JSON.stringify(clientes));
-        renderClientes();
-      }
-    }
-
-    function whatsCliente(fone, nome) {
-      const msg = `Olá ${nome}, tudo bem?`;
-      window.open(`https://wa.me/${fone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, "_blank");
-    }
-
-    function solicitarEmprestimo(i) {
-      const c = clientes[i];
-      localStorage.setItem("selectedClient", JSON.stringify(c));
+    function solicitarEmprestimo(nome, whatsapp) {
+      localStorage.setItem("emprestimoTemp", JSON.stringify({ nome, whatsapp }));
       window.location.href = "emprestimo.html";
     }
 
-    renderClientes();
+    function editarCliente(i) {
+      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      const c = clientes[i];
+      document.getElementById("nome").value = c.nome;
+      document.getElementById("whatsapp").value = c.whatsapp;
+      document.getElementById("endereco").value = c.endereco || "";
+      clientes.splice(i, 1);
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+      exibirClientes();
+    }
+
+    function excluirCliente(i) {
+      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      if (confirm("Excluir este cliente?")) {
+        clientes.splice(i, 1);
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+        exibirClientes();
+      }
+    }
+
+    window.onload = () => {
+      const tema = localStorage.getItem("tema");
+      if (tema === "light") document.body.classList.add("light");
+      atualizarIconeTema();
+      exibirClientes();
+    };
   </script>
 </body>
 </html>
