@@ -185,13 +185,28 @@
 
     .cliente-card {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      align-items: flex-start;
       background: rgba(255, 255, 255, 0.05);
       border-radius: 10px;
       padding: 12px 16px;
       margin-bottom: 10px;
+      gap: 15px;
       flex-wrap: wrap;
+    }
+
+    .cliente-imagens img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-right: 6px;
+      border: 2px solid var(--accent);
+      transition: 0.3s;
+    }
+
+    .cliente-imagens img:hover {
+      transform: scale(1.1);
     }
 
     .cliente-info {
@@ -202,6 +217,7 @@
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
+      margin-top: 10px;
     }
 
     @media (max-width: 768px) {
@@ -257,7 +273,7 @@
 
     <div class="card">
       <h2>📋 Clientes Cadastrados</h2>
-      <input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome..." oninput="filtrarClientes()" />
+      <input type="text" id="filtroCliente" placeholder="🔍 Filtrar por nome..." oninput="filtrarClientes()" />
       <div id="listaClientes"></div>
     </div>
   </main>
@@ -288,30 +304,40 @@
       const nome = document.getElementById("nome").value.trim();
       const whatsapp = document.getElementById("whatsapp").value.trim();
       const endereco = document.getElementById("endereco").value.trim();
-      const fotoDocumento = document.getElementById("fotoDocumento").value;
-      const comprovanteResidencia = document.getElementById("comprovanteResidencia").value;
+      const fotoDocumentoInput = document.getElementById("fotoDocumento");
+      const comprovanteResidenciaInput = document.getElementById("comprovanteResidencia");
 
       if (!nome) return alert("⚠️ Informe o nome do cliente!");
-      if (whatsapp && !/^\d{8,15}$/.test(whatsapp)) return alert("⚠️ Informe um número de WhatsApp válido!");
 
       const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      if (clientes.some(c => c.nome.toLowerCase() === nome.toLowerCase()))
-        return alert("⚠️ Este cliente já está cadastrado!");
+      if (clientes.some(c => c.nome.toLowerCase() === nome.toLowerCase())) return alert("⚠️ Este cliente já está cadastrado!");
 
-      clientes.push({ nome, whatsapp, endereco, fotoDocumento, comprovanteResidencia });
+      const readerDoc = new FileReader();
+      const readerComp = new FileReader();
 
-      // Ordena alfabeticamente
-      clientes.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
-
-      localStorage.setItem("clientes", JSON.stringify(clientes));
-      exibirClientes();
-      limparCampos();
+      readerDoc.onload = function(e1) {
+        const docImg = e1.target.result;
+        readerComp.onload = function(e2) {
+          const compImg = e2.target.result;
+          const cliente = { nome, whatsapp, endereco, fotoDocumento: docImg, comprovanteResidencia: compImg };
+          clientes.push(cliente);
+          localStorage.setItem("clientes", JSON.stringify(clientes));
+          exibirClientes();
+          limparCampos();
+        };
+        if (comprovanteResidenciaInput.files[0]) readerComp.readAsDataURL(comprovanteResidenciaInput.files[0]);
+        else readerComp.onload();
+      };
+      if (fotoDocumentoInput.files[0]) readerDoc.readAsDataURL(fotoDocumentoInput.files[0]);
+      else readerDoc.onload();
     }
 
     function limparCampos() {
-      ["nome", "whatsapp", "endereco", "fotoDocumento", "comprovanteResidencia"].forEach(id => {
-        document.getElementById(id).value = "";
-      });
+      document.getElementById("nome").value = "";
+      document.getElementById("whatsapp").value = "";
+      document.getElementById("endereco").value = "";
+      document.getElementById("fotoDocumento").value = "";
+      document.getElementById("comprovanteResidencia").value = "";
     }
 
     function exibirClientes(listaFiltrada) {
@@ -319,38 +345,32 @@
       lista.innerHTML = "";
       const clientes = listaFiltrada || JSON.parse(localStorage.getItem("clientes")) || [];
 
-      if (clientes.length === 0) {
-        lista.innerHTML = "<p>Nenhum cliente encontrado.</p>";
-        return;
-      }
-
       clientes.forEach((c, i) => {
         const div = document.createElement("div");
         div.className = "cliente-card";
         div.innerHTML = `
+          <div class="cliente-imagens">
+            ${c.fotoDocumento ? `<img src="${c.fotoDocumento}" alt="Documento" onclick="abrirImagem('${c.fotoDocumento}')">` : ""}
+            ${c.comprovanteResidencia ? `<img src="${c.comprovanteResidencia}" alt="Comprovante" onclick="abrirImagem('${c.comprovanteResidencia}')">` : ""}
+          </div>
           <div class="cliente-info">
             <strong>👤 ${c.nome}</strong><br>
             📱 ${c.whatsapp || "Sem número"}<br>
             📍 ${c.endereco || "Sem endereço"}
-          </div>
-          <div class="cliente-botoes">
-            <button onclick="window.open('https://wa.me/55${c.whatsapp}','_blank')">💬 WhatsApp</button>
-            <button onclick="solicitarEmprestimo('${c.nome}','${c.whatsapp}')">💸 Solicitar</button>
-            <button onclick="editarCliente(${i})">✏️ Editar</button>
-            <button class="btn-danger" onclick="excluirCliente(${i})">🗑️ Excluir</button>
-          </div>
-        `;
+            <div class="cliente-botoes">
+              <button onclick="window.open('https://wa.me/55${c.whatsapp}','_blank')">💬 WhatsApp</button>
+              <button onclick="solicitarEmprestimo('${c.nome}','${c.whatsapp}')">💸 Solicitar</button>
+              <button onclick="editarCliente(${i})">✏️ Editar</button>
+              <button class="btn-danger" onclick="excluirCliente(${i})">🗑️ Excluir</button>
+            </div>
+          </div>`;
         lista.appendChild(div);
       });
     }
 
-    function filtrarClientes() {
-      const termo = document.getElementById("filtroNome").value.toLowerCase();
-      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      const filtrados = clientes
-        .filter(c => c.nome.toLowerCase().includes(termo))
-        .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
-      exibirClientes(filtrados);
+    function abrirImagem(src) {
+      const win = window.open();
+      win.document.write(`<img src="${src}" style="width:100%">`);
     }
 
     function solicitarEmprestimo(nome, whatsapp) {
@@ -378,16 +398,17 @@
       }
     }
 
+    function filtrarClientes() {
+      const termo = document.getElementById("filtroCliente").value.toLowerCase();
+      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      const filtrados = clientes.filter(c => c.nome.toLowerCase().includes(termo));
+      exibirClientes(filtrados);
+    }
+
     window.onload = () => {
       const tema = localStorage.getItem("tema");
       if (tema === "light") document.body.classList.add("light");
       atualizarIconeTema();
-
-      // Ordena e exibe clientes na carga inicial
-      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      clientes.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
-      localStorage.setItem("clientes", JSON.stringify(clientes));
-
       exibirClientes();
     };
   </script>
