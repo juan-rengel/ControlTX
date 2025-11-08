@@ -448,6 +448,9 @@
               <button class="small-btn danger" data-action="delete" data-idx="${idx}"><i class="fa-solid fa-trash"></i> Excluir</button>
               <button class="small-btn history" data-action="history" data-idx="${idx}"><i class="fa-solid fa-eye"></i> Ver Histórico</button>
               <button class="small-btn whats" data-action="whats" data-idx="${idx}"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+              <button class="small-btn primary" data-action="solicitar" data-idx="${idx}">
+              <i class="fa-solid fa-hand-holding-dollar"></i> Solicitar
+              </button>
             </div>
           </div>
         `;
@@ -482,6 +485,15 @@
           } else if(action === 'history'){
             alert('Abrir histórico de empréstimos (hook para implementar).');
           }
+            else if (action === 'solicitar') {
+            const c = clients[idx];
+            localStorage.setItem('emprestimoCliente', JSON.stringify({
+            nome: c.name,
+            telefone: c.phone
+          }));
+          
+  window.location.href = 'emprestimo.html';
+}
         });
 
         // thumbnails click to open modal

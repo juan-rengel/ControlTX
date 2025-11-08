@@ -290,7 +290,7 @@
   </select>
 
   <label>Ou digite o nome do cliente:</label>
-  <input type="text" id="cliente" placeholder="Nome completo do cliente" />
+  <input type="text" id="clienteNome" placeholder="Nome completo do cliente" />
 
   <label>Valor do Empréstimo (R$):</label>
   <input type="number" id="valor" placeholder="0,00" step="0.01" />
@@ -303,6 +303,9 @@
 
   <label>Data de Vencimento:</label>
   <input type="date" id="dataVencimento" />
+
+  
+  <input id="clienteTelefone" type="tel" placeholder="WhatsApp">
 
   <label>Observações:</label>
   <textarea id="observacoes" rows="3" placeholder="Observações adicionais..."></textarea>
@@ -427,6 +430,24 @@ window.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("clienteSelecionado"); // limpa depois
   }
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const dados = JSON.parse(localStorage.getItem('emprestimoCliente'));
+  if (dados) {
+    const nomeInput = document.getElementById('clienteNome');
+    const telInput = document.getElementById('clienteTelefone');
+    if (nomeInput) {
+      nomeInput.value = dados.nome || '';
+      nomeInput.readOnly = true;
+    }
+    if (telInput) {
+      telInput.value = dados.telefone || '';
+      telInput.readOnly = true;
+    }
+  }
+});
+
   </script>
 </body>
 </html>
