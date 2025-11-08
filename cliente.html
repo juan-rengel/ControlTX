@@ -464,7 +464,7 @@ function exibirClientes(){
           </div>
           <div class="cliente-botoes" style="margin-top:12px;">
             <button class="btn-whatsapp" title="Abrir WhatsApp">💬 WhatsApp</button>
-            <button class="btn-solicitar" title="Solicitar empréstimo">💸 Solicitar</button>
+            <button class="btn-solicitar" onclick="solicitarEmprestimo('${c.nome}','${c.whatsapp}','${c.endereco}','${c.fotoPerfil || ''}')">💸 Solicitar</button>
             <button class="btn-editar" title="Editar cliente">✏️ Editar</button>
             <button class="btn-danger" title="Excluir cliente">🗑️ Excluir</button>
           </div>
@@ -497,6 +497,12 @@ function exibirClientes(){
 
       listaEl.appendChild(div);
     });
+}
+function solicitarEmprestimo(nome, whatsapp, endereco, fotoPerfil) {
+  localStorage.setItem("emprestimoTemp", JSON.stringify({
+    nome, whatsapp, endereco, fotoPerfil
+  }));
+  window.location.href = "emprestimo.html";
 }
 
 function solicitarEmprestimo(nome, whatsapp) {

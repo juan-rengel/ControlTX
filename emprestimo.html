@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>💸 Empréstimos - MJ Tecnologia</title>
   <style>
     :root {
@@ -15,7 +15,6 @@
       --whatsapp: #25d366;
       --solicitar: #ffcc00;
     }
-
     body.light {
       --bg: #f4f6fb;
       --card: #ffffff;
@@ -25,214 +24,75 @@
       --input-bg: #f1f1f1;
     }
 
-    body {
-      font-family: "Poppins", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-      display: flex;
-      transition: 0.4s ease;
+    body{
+      font-family:"Poppins",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      margin:0;
+      display:flex;
+      transition:0.4s ease;
     }
 
-    .sidebar {
-      width: 240px;
-      background: var(--sidebar);
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
-      transition: 0.3s;
+    .sidebar{
+      width:240px;background:var(--sidebar);height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;
+      box-shadow:2px 0 8px rgba(0,0,0,0.3);z-index:1000;transition:0.3s;
+    }
+    .sidebar h2{ text-align:center;padding:20px 0;color:var(--accent);margin:0;border-bottom:1px solid rgba(255,255,255,0.1); }
+    .sidebar a{ color:var(--text);padding:12px 20px;text-decoration:none;display:flex;align-items:center;gap:10px;border-radius:8px;margin:6px 10px;transition:0.3s;}
+    .sidebar a:hover,.sidebar a.ativo{ background:var(--accent);color:#fff; }
+
+    header{
+      background:var(--card);color:var(--accent);padding:15px 25px;display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 4px 10px rgba(0,0,0,0.3);position:fixed;top:0;left:240px;right:0;z-index:999;transition:0.3s;
+    }
+    header h1{ margin:0;font-size:22px;color:var(--accent); }
+    .theme-toggle{ background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:bold;transition:0.3s; }
+
+    main{ margin-left:260px;margin-top:90px;padding:0 20px;max-width:1100px;width:100%;transition:0.3s; }
+
+    .card{ background:var(--card);border-radius:14px;padding:20px;box-shadow:0 4px 15px rgba(0,0,0,0.3);margin-bottom:20px;transition:0.3s; }
+    input, select { width:100%; padding:10px; margin:6px 0; border-radius:8px; border:1px solid #ccc; background:var(--input-bg); color:var(--text); font-size:15px; }
+
+    button{ background:var(--accent); color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; margin-right:6px; font-weight:bold; transition:0.3s; }
+    button:hover{ opacity:0.9; }
+    .btn-danger{ background:#dc2626; }
+    .btn-renovar{ background:#22c55e; }
+    .btn-editar{ background:#0ea5e9; }
+    .btn-solicitar{ background:var(--solicitar); color:#000; }
+
+    @media (max-width:768px){
+      .sidebar{ transform:translateX(-100%); }
+      .sidebar.abrir{ transform:translateX(0); }
+      header{ left:0; }
+      main{ margin-left:0; }
     }
 
-    .sidebar h2 {
-      text-align: center;
-      padding: 20px 0;
-      color: var(--accent);
-      margin: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
+    /* Cliente selecionado */
+    .cliente-selected { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .cliente-selected img { width:90px; height:90px; border-radius:10px; object-fit:cover; border:2px solid var(--accent); }
 
-    .sidebar a {
-      color: var(--text);
-      padding: 12px 20px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-radius: 8px;
-      margin: 6px 10px;
-      transition: 0.3s;
-    }
-
-    .sidebar a:hover,
-    .sidebar a.ativo {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    header {
-      background: var(--card);
-      color: var(--accent);
-      padding: 15px 25px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      position: fixed;
-      top: 0;
-      left: 240px;
-      right: 0;
-      z-index: 999;
-      transition: 0.3s;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-      color: var(--accent);
-    }
-
-    .theme-toggle {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .menu-btn {
-      display: none;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 18px;
-      margin-right: 10px;
-    }
-
-    main {
-      margin-left: 260px;
-      margin-top: 90px;
-      padding: 0 20px;
-      max-width: 1100px;
-      width: 100%;
-      transition: 0.3s;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      margin-bottom: 20px;
-      transition: 0.3s;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background: var(--input-bg);
-      color: var(--text);
-      font-size: 15px;
-    }
-
-    button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-right: 6px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    button:hover { opacity: 0.9; }
-
-    .btn-whatsapp { background: var(--whatsapp); }
-    .btn-solicitar { background: var(--solicitar); color: #000; }
-    .btn-danger { background: #dc2626; }
-    .btn-renovar { background: #22c55e; }
-
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); }
-      .sidebar.abrir { transform: translateX(0); }
-      header { left: 0; }
-      .menu-btn { display: inline-block; }
-      main { margin-left: 0; }
-    }
-
-    #dadosCliente {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    #fotoCliente {
-      width: 90px;
-      height: 90px;
-      border-radius: 10px;
-      object-fit: cover;
-      border: 2px solid var(--accent);
-    }
-
-    #dadosCliente p { margin: 4px 0; }
-
-    #listaEmprestimos {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 15px;
-    }
-
+    /* Lista de empréstimos */
+    #listaEmprestimos { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:12px; margin-top:12px; }
     .emprestimo-card {
-      background: var(--card);
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      transition: 0.3s;
+      background: rgba(255,255,255,0.03);
+      border-radius:12px;
+      padding:12px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      transition:0.25s;
     }
+    .emprestimo-card:hover{ transform:translateY(-4px); }
+    .emprestimo-card img{ width:64px;height:64px;border-radius:8px;object-fit:cover;border:2px solid var(--accent); }
+    .emprestimo-info p{ margin:4px 0; font-size:14px; }
 
-    .emprestimo-card:hover { transform: translateY(-3px); }
+    .filtro { margin:12px 0; max-width:420px; }
 
-    .emprestimo-card img {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 2px solid var(--accent);
-    }
-
-    .emprestimo-info {
-      flex: 1;
-    }
-
-    .emprestimo-info p {
-      margin: 3px 0;
-      font-size: 14px;
-    }
-
-    #filtroNome { margin-bottom: 10px; }
+    .toast{ position:fixed; top:18px; right:18px; background:#22c55e; color:white; padding:8px 12px; border-radius:8px; box-shadow:0 8px 18px rgba(0,0,0,0.3); opacity:0; transform:translateY(-8px); transition:0.28s; z-index:4000; font-weight:600;}
+    .toast.show{ opacity:1; transform:translateY(0); }
   </style>
 </head>
-
 <body>
   <aside class="sidebar" id="sidebar">
     <h2>📊 MJ</h2>
@@ -251,169 +111,292 @@
   </header>
 
   <main>
-    <div class="card">
-      <h2>📋 Dados do Cliente</h2>
-      <div id="dadosCliente">
-        <img id="fotoCliente" src="" alt="Foto de perfil">
+    <!-- Cliente selecionado (obrigatório) -->
+    <div class="card" id="cardClienteSelecionado">
+      <h2>👤 Cliente Selecionado</h2>
+      <div class="cliente-selected">
+        <img id="fotoCliente" src="" alt="Foto do cliente">
         <div>
-          <p><strong>👤 Nome:</strong> <span id="clienteNome">---</span></p>
-          <p><strong>📱 WhatsApp:</strong> <span id="clienteWhats">---</span></p>
-          <p><strong>📍 Endereço:</strong> <span id="clienteEndereco">---</span></p>
+          <p><strong id="clienteNome">--- </strong></p>
+          <p>📱 <span id="clienteWhats">---</span></p>
+          <p>📍 <span id="clienteEndereco">---</span></p>
         </div>
       </div>
     </div>
 
+    <!-- Formulário novo / editar / renovar -->
     <div class="card">
-  <h2>📝 Novo Empréstimo</h2>
-  <input type="number" id="valor" placeholder="Valor do empréstimo (R$)">
-  <input type="number" id="juros" placeholder="Juros diários (%)" step="0.01">
-  <input type="number" id="parcelas" placeholder="Quantidade de parcelas">
-  <input type="date" id="dataInicio" placeholder="Data de início">
-  <input type="date" id="dataVencimento" placeholder="Data de vencimento">
-  
-  <p id="resultadoJuros" style="margin-top:8px; font-weight:bold; color:var(--accent);"></p>
-  
-  <button onclick="salvarEmprestimo()">💾 Salvar</button>
-  <button class="btn-solicitar">📩 Solicitar</button>
-</div>
+      <h2 id="formTitle">📝 Novo Empréstimo</h2>
+
+      <label>Valor (R$)</label>
+      <input type="number" id="valor" step="0.01" placeholder="Ex: 1500.00">
+
+      <label>Juros diário (%)</label>
+      <input type="number" id="juros" step="0.01" placeholder="Ex: 1.5">
+
+      <label>Dias</label>
+      <input type="number" id="dias" placeholder="Ex: 30">
+
+      <p id="displayTotal" style="margin-top:8px;font-weight:700;color:var(--accent);"></p>
+
+      <div style="margin-top:10px;">
+        <button id="btnSalvar" onclick="handleSalvar()">💾 Salvar</button>
+        <button id="btnCancelar" onclick="cancelarEdicao()" style="display:none;">✖ Cancelar</button>
+      </div>
+    </div>
+
+    <!-- filtro e lista -->
     <div class="card">
       <h2>📂 Empréstimos Cadastrados</h2>
-      <input type="text" id="filtroNome" placeholder="Filtrar por nome do cliente...">
+      <div class="filtro">
+        <input type="text" id="filtroNome" placeholder="Filtrar por nome do cliente..." />
+      </div>
       <div id="listaEmprestimos"></div>
     </div>
   </main>
 
- <script>
-  window.onload = () => {
-    if (localStorage.getItem("tema") === "light") document.body.classList.add("light");
-    atualizarIconeTema();
+  <div id="toast" class="toast" aria-hidden="true"></div>
 
-    const clienteTemp = JSON.parse(localStorage.getItem("emprestimoTemp"));
-    if (clienteTemp) {
-      document.getElementById("clienteNome").textContent = clienteTemp.nome || "Sem nome";
-      document.getElementById("clienteWhats").textContent = clienteTemp.whatsapp || "Sem WhatsApp";
-      document.getElementById("clienteEndereco").textContent = clienteTemp.endereco || "Sem endereço";
-      if (clienteTemp.fotoPerfil) document.getElementById("fotoCliente").src = clienteTemp.fotoPerfil;
+  <script>
+    // Estado
+    let editingId = null;      // id do empréstimo que está sendo editado (se houver)
+    let isRenewMode = false;   // true quando usuário clicou "Renovar" (salvar cria novo)
+    const toastEl = document.getElementById('toast');
+
+    // Inicialização
+    window.addEventListener('DOMContentLoaded', () => {
+      // Verifica cliente selecionado
+      const clienteTemp = JSON.parse(localStorage.getItem('emprestimoTemp'));
+      if (!clienteTemp || !clienteTemp.nome) {
+        alert('⚠️ É necessário selecionar um cliente antes de solicitar um empréstimo!');
+        window.location.href = 'cliente.html';
+        return;
+      }
+      // Preenche cliente
+      document.getElementById('clienteNome').textContent = clienteTemp.nome;
+      document.getElementById('clienteWhats').textContent = clienteTemp.whatsapp || '---';
+      document.getElementById('clienteEndereco').textContent = clienteTemp.endereco || '---';
+      if (clienteTemp.fotoPerfil) document.getElementById('fotoCliente').src = clienteTemp.fotoPerfil;
+
+      // Tema
+      if (localStorage.getItem('tema') === 'light') document.body.classList.add('light');
+
+      // Listeners
+      ['valor','juros','dias'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', atualizarDisplayTotal);
+      });
+      document.getElementById('filtroNome').addEventListener('input', exibirEmprestimos);
+
+      exibirEmprestimos();
+      atualizarIconeTema();
+    });
+
+    // Tema e menu (mantendo comportamento original)
+    function alternarTema() {
+      document.body.classList.toggle('light');
+      localStorage.setItem('tema', document.body.classList.contains('light') ? 'light' : 'dark');
+      atualizarIconeTema();
+    }
+    function atualizarIconeTema() {
+      const btn = document.querySelector('.theme-toggle');
+      if (btn) btn.textContent = document.body.classList.contains('light') ? '☀️ Tema' : '🌙 Tema';
+    }
+    function toggleMenu(){
+      document.getElementById('sidebar').classList.toggle('abrir');
     }
 
-    document.getElementById("filtroNome").addEventListener("input", exibirEmprestimos);
-    exibirEmprestimos();
-
-    // Atualiza o cálculo quando qualquer campo mudar
-    ["valor", "juros", "dataInicio", "dataVencimento"].forEach(id => {
-      document.getElementById(id).addEventListener("input", calcularTotalComJuros);
-    });
-  };
-
-  function calcularTotalComJuros() {
-    const valor = parseFloat(document.getElementById("valor").value);
-    const juros = parseFloat(document.getElementById("juros").value);
-    const dataInicio = document.getElementById("dataInicio").value;
-    const dataVencimento = document.getElementById("dataVencimento").value;
-
-    if (!valor || !juros || !dataInicio || !dataVencimento) {
-      document.getElementById("resultadoJuros").textContent = "";
-      return;
+    // Cálculo do total (juros composto diário)
+    function calcularTotalComposto(valor, jurosPercent, dias) {
+      const v = Number(valor) || 0;
+      const j = Number(jurosPercent) || 0;
+      const d = Math.max(0, Number(dias) || 0);
+      const total = v * Math.pow(1 + j/100, d);
+      return total;
     }
 
-    const inicio = new Date(dataInicio);
-    const vencimento = new Date(dataVencimento);
-    const diffDias = Math.max(0, Math.floor((vencimento - inicio) / (1000 * 60 * 60 * 24)));
+    function atualizarDisplayTotal(){
+      const valor = parseFloat(document.getElementById('valor').value);
+      const juros = parseFloat(document.getElementById('juros').value);
+      const dias = parseInt(document.getElementById('dias').value);
+      if (!valor || !juros || !dias) {
+        document.getElementById('displayTotal').textContent = '';
+        return;
+      }
+      const total = calcularTotalComposto(valor, juros, dias);
+      document.getElementById('displayTotal').textContent = `💰 Total estimado (composto): R$ ${total.toFixed(2)} (${dias} dias)`;
+    }
 
-    const valorFinal = valor + (valor * (juros / 100) * diffDias);
+    // Salvar: cria novo ou atualiza existente
+    function handleSalvar(){
+      const cliente = JSON.parse(localStorage.getItem('emprestimoTemp'));
+      if (!cliente || !cliente.nome) {
+        alert('⚠️ Nenhum cliente selecionado. Volte à página de clientes e selecione um para continuar.');
+        return;
+      }
 
-    document.getElementById("resultadoJuros").textContent =
-      `💰 Valor total estimado com juros até o vencimento (${diffDias} dias): R$ ${valorFinal.toFixed(2)}`;
-  }
+      const valor = parseFloat(document.getElementById('valor').value);
+      const juros = parseFloat(document.getElementById('juros').value);
+      const dias = parseInt(document.getElementById('dias').value);
 
-  function salvarEmprestimo() {
-    const valor = parseFloat(document.getElementById("valor").value);
-    const juros = parseFloat(document.getElementById("juros").value);
-    const parcelas = document.getElementById("parcelas").value.trim();
-    const dataInicio = document.getElementById("dataInicio").value.trim();
-    const dataVencimento = document.getElementById("dataVencimento").value.trim();
-    const cliente = JSON.parse(localStorage.getItem("emprestimoTemp"));
+      if (!valor || isNaN(juros) || isNaN(dias)) {
+        alert('⚠️ Preencha corretamente valor, juros e dias.');
+        return;
+      }
 
-    if (!valor || !juros || !parcelas || !dataInicio || !dataVencimento)
-      return alert("⚠️ Preencha todos os campos!");
+      const total = calcularTotalComposto(valor, juros, dias);
 
-    const inicio = new Date(dataInicio);
-    const vencimento = new Date(dataVencimento);
-    const diffDias = Math.max(0, Math.floor((vencimento - inicio) / (1000 * 60 * 60 * 24)));
-    const total = valor + (valor * (juros / 100) * diffDias);
+      const emprestimos = JSON.parse(localStorage.getItem('emprestimos')) || [];
 
-    const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
-    emprestimos.push({
-      id: Date.now(),
-      nome: cliente?.nome || "Desconhecido",
-      whatsapp: cliente?.whatsapp || "",
-      endereco: cliente?.endereco || "",
-      fotoPerfil: cliente?.fotoPerfil || "",
-      valor,
-      juros,
-      parcelas,
-      dataInicio,
-      dataVencimento,
-      total: total.toFixed(2),
-      dias: diffDias
-    });
+      if (editingId && !isRenewMode) {
+        // Atualiza empréstimo existente
+        const idx = emprestimos.findIndex(e => e.id === editingId);
+        if (idx >= 0) {
+          emprestimos[idx] = {
+            ...emprestimos[idx],
+            valor: valor.toFixed(2),
+            juros: Number(juros),
+            dias: Number(dias),
+            total: total.toFixed(2),
+            updatedAt: new Date().toISOString()
+          };
+          localStorage.setItem('emprestimos', JSON.stringify(emprestimos));
+          mostrarToast('✏️ Empréstimo atualizado com sucesso!');
+        }
+      } else {
+        // Cria novo empréstimo (novo registro)
+        const novo = {
+          id: Date.now(),
+          nome: cliente.nome,
+          whatsapp: cliente.whatsapp || '',
+          endereco: cliente.endereco || '',
+          fotoPerfil: cliente.fotoPerfil || '',
+          valor: valor.toFixed(2),
+          juros: Number(juros),
+          dias: Number(dias),
+          total: total.toFixed(2),
+          createdAt: new Date().toISOString()
+        };
+        emprestimos.push(novo);
+        localStorage.setItem('emprestimos', JSON.stringify(emprestimos));
+        mostrarToast('✅ Empréstimo salvo com sucesso!');
+      }
 
-    localStorage.setItem("emprestimos", JSON.stringify(emprestimos));
-    alert("✅ Empréstimo salvo com sucesso!");
-    exibirEmprestimos();
-  }
-
-  function exibirEmprestimos() {
-    const lista = document.getElementById("listaEmprestimos");
-    const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
-    const filtro = document.getElementById("filtroNome").value.toLowerCase();
-    lista.innerHTML = "";
-
-    const filtrados = emprestimos.filter(e => e.nome.toLowerCase().includes(filtro));
-
-    filtrados.forEach(e => {
-      const div = document.createElement("div");
-      div.className = "emprestimo-card";
-      div.innerHTML = `
-        <img src="${e.fotoPerfil || 'https://via.placeholder.com/60'}" alt="Foto">
-        <div class="emprestimo-info">
-          <p><strong>${e.nome}</strong></p>
-          <p>💰 R$ ${e.valor} + ${e.juros}% a.d.</p>
-          <p>📅 ${e.parcelas}x - ${e.dataInicio} → ${e.dataVencimento}</p>
-          <p><strong>Total: R$ ${e.total}</strong> (${e.dias} dias)</p>
-        </div>
-        <div>
-          <button class="btn-renovar" onclick="renovarEmprestimo(${e.id})">🔄</button>
-          <button class="btn-danger" onclick="excluirEmprestimo(${e.id})">🗑️</button>
-        </div>
-      `;
-      lista.appendChild(div);
-    });
-
-    if (filtrados.length === 0)
-      lista.innerHTML = `<p style="text-align:center;opacity:0.7;">Nenhum empréstimo encontrado</p>`;
-  }
-
-  function excluirEmprestimo(id) {
-    const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
-    const novos = emprestimos.filter(e => e.id !== id);
-    localStorage.setItem("emprestimos", JSON.stringify(novos));
-    exibirEmprestimos();
-  }
-
-  function renovarEmprestimo(id) {
-    const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
-    const emp = emprestimos.find(e => e.id === id);
-    if (emp) {
-      emp.id = Date.now();
-      emp.dataInicio = new Date().toISOString().split("T")[0];
-      emprestimos.push(emp);
-      localStorage.setItem("emprestimos", JSON.stringify(emprestimos));
-      alert("♻️ Empréstimo renovado com nova data!");
+      // reset form & state
+      limparFormulario();
+      editingId = null;
+      isRenewMode = false;
+      document.getElementById('btnCancelar').style.display = 'none';
+      document.getElementById('formTitle').textContent = '📝 Novo Empréstimo';
       exibirEmprestimos();
     }
-  }
-</script>
 
+    function limparFormulario(){
+      ['valor','juros','dias'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      document.getElementById('displayTotal').textContent = '';
+    }
+
+    function cancelarEdicao(){
+      editingId = null;
+      isRenewMode = false;
+      limparFormulario();
+      document.getElementById('btnCancelar').style.display = 'none';
+      document.getElementById('formTitle').textContent = '📝 Novo Empréstimo';
+    }
+
+    // Exibir empréstimos com filtro
+    function exibirEmprestimos(){
+      const listaEl = document.getElementById('listaEmprestimos');
+      const emprestimos = JSON.parse(localStorage.getItem('emprestimos')) || [];
+      const filtro = (document.getElementById('filtroNome').value || '').toLowerCase();
+      listaEl.innerHTML = '';
+
+      const filtrados = emprestimos.filter(e => e.nome.toLowerCase().includes(filtro));
+      if (filtrados.length === 0) {
+        listaEl.innerHTML = '<p style="opacity:0.7;text-align:center;">Nenhum empréstimo encontrado</p>';
+        return;
+      }
+
+      filtrados.forEach(e => {
+        const card = document.createElement('div');
+        card.className = 'emprestimo-card';
+        card.innerHTML = `
+          <div style="display:flex;gap:12px;align-items:center;">
+            <img src="${e.fotoPerfil || 'https://via.placeholder.com/64'}" alt="foto">
+            <div class="emprestimo-info">
+              <p><strong>${e.nome}</strong></p>
+              <p>💵 Valor: R$ ${Number(e.valor).toFixed(2)}</p>
+              <p>📈 Juros: ${Number(e.juros)}% ao dia</p>
+              <p>📅 Dias: ${Number(e.dias)}</p>
+              <p><strong>Total: R$ ${Number(e.total).toFixed(2)}</strong></p>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button class="btn-editar" onclick="editarEmprestimo(${e.id})">✏️ Editar</button>
+            <button class="btn-renovar" onclick="renovarEmprestimo(${e.id})">🔁 Renovar</button>
+            <button class="btn-danger" onclick="excluirEmprestimo(${e.id})">🗑️ Excluir</button>
+          </div>
+        `;
+        listaEl.appendChild(card);
+      });
+    }
+
+    // Excluir por id
+    function excluirEmprestimo(id) {
+      const emprestimos = JSON.parse(localStorage.getItem('emprestimos')) || [];
+      const novos = emprestimos.filter(e => e.id !== id);
+      localStorage.setItem('emprestimos', JSON.stringify(novos));
+      mostrarToast('🗑️ Empréstimo excluído');
+      exibirEmprestimos();
+    }
+
+    // Renovar: carrega os dados no formulário mas marca como renovar (salva criará novo)
+    function renovarEmprestimo(id) {
+      const emprestimos = JSON.parse(localStorage.getItem('emprestimos')) || [];
+      const emp = emprestimos.find(e => e.id === id);
+      if (!emp) return;
+      // Preenche formulário com valores do empréstimo
+      document.getElementById('valor').value = Number(emp.valor);
+      document.getElementById('juros').value = Number(emp.juros);
+      document.getElementById('dias').value = Number(emp.dias);
+      atualizarDisplayTotal();
+      isRenewMode = true;
+      editingId = null; // salvar criará novo
+      document.getElementById('formTitle').textContent = '🔁 Renovar Empréstimo (salvar criará novo)';
+      document.getElementById('btnCancelar').style.display = 'inline-block';
+      mostrarToast('🔁 Renovação: ajuste valores se desejar e clique Salvar');
+    }
+
+    // Editar: carrega os dados no formulário e salva atualiza mesmo registro
+    function editarEmprestimo(id) {
+      const emprestimos = JSON.parse(localStorage.getItem('emprestimos')) || [];
+      const emp = emprestimos.find(e => e.id === id);
+      if (!emp) return;
+      document.getElementById('valor').value = Number(emp.valor);
+      document.getElementById('juros').value = Number(emp.juros);
+      document.getElementById('dias').value = Number(emp.dias);
+      atualizarDisplayTotal();
+      editingId = id;
+      isRenewMode = false;
+      document.getElementById('formTitle').textContent = '✏️ Editando Empréstimo';
+      document.getElementById('btnCancelar').style.display = 'inline-block';
+      mostrarToast('✏️ Modo edição: ajuste e clique Salvar');
+    }
+
+    // Toast
+    function mostrarToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      setTimeout(()=> toastEl.classList.remove('show'), 2000);
+    }
+
+    // util para testes manuais se precisar
+    window._dump = () => {
+      console.log('emprestimos:', JSON.parse(localStorage.getItem('emprestimos')));
+    };
+  </script>
 </body>
 </html>
