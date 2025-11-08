@@ -1,190 +1,238 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>💸 Empréstimos - MJ Tecnologia</title>
-<style>
-:root {
-  --bg: #0a0f1f;
-  --card: #141c2f;
-  --text: #e2e8f0;
-  --accent: #007bff;
-  --sidebar: #10172a;
-  --input-bg: #1e263b;
-}
-body.light {
-  --bg: #f4f6fb;
-  --card: #ffffff;
-  --text: #111;
-  --accent: #007bff;
-  --sidebar: #f0f0f0;
-  --input-bg: #f1f1f1;
-}
-body {
-  font-family: "Poppins", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  margin: 0;
-  display: flex;
-  transition: 0.4s ease;
-}
-.sidebar {
-  width: 240px;
-  background: var(--sidebar);
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  transition: 0.3s;
-}
-.sidebar h2 {
-  text-align: center;
-  padding: 20px 0;
-  color: var(--accent);
-  margin: 0;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-.sidebar a {
-  color: var(--text);
-  padding: 12px 20px;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-radius: 8px;
-  margin: 6px 10px;
-  transition: 0.3s;
-}
-.sidebar a:hover, .sidebar a.ativo {
-  background: var(--accent);
-  color: #fff;
-}
-.sidebar.fechar {
-  transform: translateX(-100%);
-}
-header {
-  background: var(--card);
-  color: var(--accent);
-  padding: 15px 25px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  position: fixed;
-  top: 0;
-  left: 240px;
-  right: 0;
-  z-index: 999;
-  transition: 0.3s;
-}
-header h1 {
-  margin: 0;
-  font-size: 22px;
-}
-.menu-btn {
-  display: none;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 18px;
-  margin-right: 10px;
-}
-.theme-toggle {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 14px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-.theme-toggle:hover { opacity: 0.9; }
-main {
-  margin-left: 260px;
-  margin-top: 90px;
-  padding: 0 20px;
-  max-width: 1100px;
-  width: 100%;
-  transition: 0.3s;
-}
-.card {
-  background: var(--card);
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  margin-bottom: 20px;
-  transition: 0.3s;
-}
-.card:hover { transform: scale(1.01); }
-input, select {
-  width: 100%;
-  padding: 10px;
-  margin: 6px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: var(--input-bg);
-  color: var(--text);
-  font-size: 15px;
-}
-button {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-right: 6px;
-  font-weight: bold;
-  transition: 0.3s;
-}
-button:hover { opacity: 0.9; }
-.btn-danger { background: red; }
-.btn-green { background: green; }
-.emprestimo-card {
-  background: rgba(255,255,255,0.05);
-  border-radius: 10px;
-  padding: 12px 16px;
-  margin-bottom: 10px;
-}
-.emprestimo-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.emprestimo-header img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--accent);
-}
-.emprestimo-info {
-  flex: 1;
-}
-.emprestimo-actions {
-  margin-top: 10px;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-@media(max-width:768px){
-  .sidebar{transform:translateX(-100%);}
-  .sidebar.abrir{transform:translateX(0);}
-  header{left:0;}
-  .menu-btn{display:inline-block;}
-  main{margin-left:0;}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💸 Empréstimos - MJ Tecnologia</title>
+  <style>
+    :root {
+      --bg: #0a0f1f;
+      --card: #141c2f;
+      --text: #e2e8f0;
+      --accent: #007bff;
+      --sidebar: #10172a;
+      --input-bg: #1e263b;
+      --whatsapp: #25d366;
+      --solicitar: #ffcc00;
+    }
+
+    body.light {
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --text: #111;
+      --accent: #007bff;
+      --sidebar: #f0f0f0;
+      --input-bg: #f1f1f1;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      display: flex;
+      transition: 0.4s ease;
+    }
+
+    .sidebar {
+      width: 240px;
+      background: var(--sidebar);
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transition: 0.3s;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      padding: 20px 0;
+      color: var(--accent);
+      margin: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar a {
+      color: var(--text);
+      padding: 12px 20px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 8px;
+      margin: 6px 10px;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.ativo {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    header {
+      background: var(--card);
+      color: var(--accent);
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 0;
+      left: 240px;
+      right: 0;
+      z-index: 999;
+      transition: 0.3s;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--accent);
+    }
+
+    .theme-toggle {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .menu-btn {
+      display: none;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 18px;
+      margin-right: 10px;
+    }
+
+    main {
+      margin-left: 260px;
+      margin-top: 90px;
+      padding: 0 20px;
+      max-width: 1100px;
+      width: 100%;
+      transition: 0.3s;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+      transition: 0.3s;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 6px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover { opacity: 0.9; }
+
+    .btn-whatsapp { background: var(--whatsapp); }
+    .btn-solicitar { background: var(--solicitar); color: #000; }
+    .btn-danger { background: #dc2626; }
+    .btn-renovar { background: #22c55e; }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.abrir { transform: translateX(0); }
+      header { left: 0; }
+      .menu-btn { display: inline-block; }
+      main { margin-left: 0; }
+    }
+
+    #dadosCliente {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    #fotoCliente {
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+    }
+
+    #dadosCliente p { margin: 4px 0; }
+
+    #listaEmprestimos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+    }
+
+    .emprestimo-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: 0.3s;
+    }
+
+    .emprestimo-card:hover { transform: translateY(-3px); }
+
+    .emprestimo-card img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+    }
+
+    .emprestimo-info {
+      flex: 1;
+    }
+
+    .emprestimo-info p {
+      margin: 3px 0;
+      font-size: 14px;
+    }
+
+    #filtroNome { margin-bottom: 10px; }
+  </style>
 </head>
+
 <body>
   <aside class="sidebar" id="sidebar">
     <h2>📊 MJ</h2>
@@ -204,148 +252,168 @@ button:hover { opacity: 0.9; }
 
   <main>
     <div class="card">
-      <h2>Novo Empréstimo</h2>
-      <input type="text" id="nomeCliente" placeholder="Nome do Cliente" readonly>
-      <input type="text" id="whatsappCliente" placeholder="WhatsApp" readonly>
-      <input type="text" id="enderecoCliente" placeholder="Endereço" readonly>
-      <input type="file" id="fotoDocumento" accept="image/*">
-      <input type="file" id="comprovanteResidencia" accept="image/*">
-      <input type="number" id="valor" placeholder="Valor do Empréstimo">
-      <input type="date" id="dataVencimento" placeholder="Data de Vencimento">
-      <button onclick="salvarEmprestimo()">💾 Salvar</button>
-      <button class="btn-danger" onclick="limparCampos()">🧹 Limpar</button>
+      <h2>📋 Dados do Cliente</h2>
+      <div id="dadosCliente">
+        <img id="fotoCliente" src="" alt="Foto de perfil">
+        <div>
+          <p><strong>👤 Nome:</strong> <span id="clienteNome">---</span></p>
+          <p><strong>📱 WhatsApp:</strong> <span id="clienteWhats">---</span></p>
+          <p><strong>📍 Endereço:</strong> <span id="clienteEndereco">---</span></p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <h2>🔍 Buscar Empréstimos</h2>
-      <input type="text" id="filtroBusca" placeholder="Digite o nome do cliente..." oninput="filtrarEmprestimos()">
-    </div>
-
+  <h2>📝 Novo Empréstimo</h2>
+  <input type="number" id="valor" placeholder="Valor do empréstimo (R$)">
+  <input type="number" id="juros" placeholder="Juros diários (%)" step="0.01">
+  <input type="number" id="parcelas" placeholder="Quantidade de parcelas">
+  <input type="date" id="dataInicio" placeholder="Data de início">
+  <input type="date" id="dataVencimento" placeholder="Data de vencimento">
+  
+  <p id="resultadoJuros" style="margin-top:8px; font-weight:bold; color:var(--accent);"></p>
+  
+  <button onclick="salvarEmprestimo()">💾 Salvar</button>
+  <button class="btn-solicitar">📩 Solicitar</button>
+</div>
     <div class="card">
-      <h2>📋 Empréstimos Registrados</h2>
+      <h2>📂 Empréstimos Cadastrados</h2>
+      <input type="text" id="filtroNome" placeholder="Filtrar por nome do cliente...">
       <div id="listaEmprestimos"></div>
     </div>
   </main>
 
-<script>
-function alternarTema(){
-  document.body.classList.toggle("light");
-  const tema=document.body.classList.contains("light")?"light":"dark";
-  localStorage.setItem("tema",tema);
-  atualizarIconeTema();
-}
-function atualizarIconeTema(){
-  const btn=document.querySelector(".theme-toggle");
-  btn.textContent=document.body.classList.contains("light")?"☀️ Tema":"🌙 Tema";
-}
-function toggleMenu(){
-  document.getElementById("sidebar").classList.toggle("abrir");
-}
+ <script>
+  window.onload = () => {
+    if (localStorage.getItem("tema") === "light") document.body.classList.add("light");
+    atualizarIconeTema();
 
-// --- Dados vindos da página Clientes ---
-window.onload = ()=>{
-  const tema=localStorage.getItem("tema");
-  if(tema==="light")document.body.classList.add("light");
-  atualizarIconeTema();
+    const clienteTemp = JSON.parse(localStorage.getItem("emprestimoTemp"));
+    if (clienteTemp) {
+      document.getElementById("clienteNome").textContent = clienteTemp.nome || "Sem nome";
+      document.getElementById("clienteWhats").textContent = clienteTemp.whatsapp || "Sem WhatsApp";
+      document.getElementById("clienteEndereco").textContent = clienteTemp.endereco || "Sem endereço";
+      if (clienteTemp.fotoPerfil) document.getElementById("fotoCliente").src = clienteTemp.fotoPerfil;
+    }
 
-  const temp=JSON.parse(localStorage.getItem("emprestimoTemp"));
-  if(temp){
-    document.getElementById("nomeCliente").value=temp.nome||"";
-    document.getElementById("whatsappCliente").value=temp.whatsapp||"";
-  }
-  exibirEmprestimos();
-};
-
-function salvarEmprestimo(){
-  const nome=document.getElementById("nomeCliente").value.trim();
-  const whatsapp=document.getElementById("whatsappCliente").value.trim();
-  const endereco=document.getElementById("enderecoCliente").value.trim();
-  const valor=document.getElementById("valor").value.trim();
-  const dataVenc=document.getElementById("dataVencimento").value.trim();
-  const docFile=document.getElementById("fotoDocumento").files[0];
-  const compFile=document.getElementById("comprovanteResidencia").files[0];
-
-  if(!nome || !valor){ alert("⚠️ Preencha nome e valor!"); return; }
-
-  const leitorDoc = docFile ? getBase64(docFile) : Promise.resolve("");
-  const leitorComp = compFile ? getBase64(compFile) : Promise.resolve("");
-
-  Promise.all([leitorDoc, leitorComp]).then(([fotoDoc, fotoComp])=>{
-    const novo = { nome, whatsapp, endereco, valor, dataVenc, fotoDoc, fotoComp };
-    const lista = JSON.parse(localStorage.getItem("emprestimos"))||[];
-    lista.push(novo);
-    localStorage.setItem("emprestimos",JSON.stringify(lista));
+    document.getElementById("filtroNome").addEventListener("input", exibirEmprestimos);
     exibirEmprestimos();
-    limparCampos();
-  });
-}
-function getBase64(file){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.onload=()=>resolve(reader.result);
-    reader.onerror=error=>reject(error);
-    reader.readAsDataURL(file);
-  });
-}
-function limparCampos(){
-  document.getElementById("valor").value="";
-  document.getElementById("dataVencimento").value="";
-  document.getElementById("fotoDocumento").value="";
-  document.getElementById("comprovanteResidencia").value="";
-}
-function exibirEmprestimos(listaFiltrada){
-  const lista = listaFiltrada || JSON.parse(localStorage.getItem("emprestimos")) || [];
-  const div=document.getElementById("listaEmprestimos");
-  div.innerHTML="";
-  lista.forEach((e,i)=>{
-    const card=document.createElement("div");
-    card.className="emprestimo-card";
-    card.innerHTML=`
-      <div class="emprestimo-header">
-        <img src="${e.fotoDoc || 'https://via.placeholder.com/50'}" alt="Doc">
+
+    // Atualiza o cálculo quando qualquer campo mudar
+    ["valor", "juros", "dataInicio", "dataVencimento"].forEach(id => {
+      document.getElementById(id).addEventListener("input", calcularTotalComJuros);
+    });
+  };
+
+  function calcularTotalComJuros() {
+    const valor = parseFloat(document.getElementById("valor").value);
+    const juros = parseFloat(document.getElementById("juros").value);
+    const dataInicio = document.getElementById("dataInicio").value;
+    const dataVencimento = document.getElementById("dataVencimento").value;
+
+    if (!valor || !juros || !dataInicio || !dataVencimento) {
+      document.getElementById("resultadoJuros").textContent = "";
+      return;
+    }
+
+    const inicio = new Date(dataInicio);
+    const vencimento = new Date(dataVencimento);
+    const diffDias = Math.max(0, Math.floor((vencimento - inicio) / (1000 * 60 * 60 * 24)));
+
+    const valorFinal = valor + (valor * (juros / 100) * diffDias);
+
+    document.getElementById("resultadoJuros").textContent =
+      `💰 Valor total estimado com juros até o vencimento (${diffDias} dias): R$ ${valorFinal.toFixed(2)}`;
+  }
+
+  function salvarEmprestimo() {
+    const valor = parseFloat(document.getElementById("valor").value);
+    const juros = parseFloat(document.getElementById("juros").value);
+    const parcelas = document.getElementById("parcelas").value.trim();
+    const dataInicio = document.getElementById("dataInicio").value.trim();
+    const dataVencimento = document.getElementById("dataVencimento").value.trim();
+    const cliente = JSON.parse(localStorage.getItem("emprestimoTemp"));
+
+    if (!valor || !juros || !parcelas || !dataInicio || !dataVencimento)
+      return alert("⚠️ Preencha todos os campos!");
+
+    const inicio = new Date(dataInicio);
+    const vencimento = new Date(dataVencimento);
+    const diffDias = Math.max(0, Math.floor((vencimento - inicio) / (1000 * 60 * 60 * 24)));
+    const total = valor + (valor * (juros / 100) * diffDias);
+
+    const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
+    emprestimos.push({
+      id: Date.now(),
+      nome: cliente?.nome || "Desconhecido",
+      whatsapp: cliente?.whatsapp || "",
+      endereco: cliente?.endereco || "",
+      fotoPerfil: cliente?.fotoPerfil || "",
+      valor,
+      juros,
+      parcelas,
+      dataInicio,
+      dataVencimento,
+      total: total.toFixed(2),
+      dias: diffDias
+    });
+
+    localStorage.setItem("emprestimos", JSON.stringify(emprestimos));
+    alert("✅ Empréstimo salvo com sucesso!");
+    exibirEmprestimos();
+  }
+
+  function exibirEmprestimos() {
+    const lista = document.getElementById("listaEmprestimos");
+    const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
+    const filtro = document.getElementById("filtroNome").value.toLowerCase();
+    lista.innerHTML = "";
+
+    const filtrados = emprestimos.filter(e => e.nome.toLowerCase().includes(filtro));
+
+    filtrados.forEach(e => {
+      const div = document.createElement("div");
+      div.className = "emprestimo-card";
+      div.innerHTML = `
+        <img src="${e.fotoPerfil || 'https://via.placeholder.com/60'}" alt="Foto">
         <div class="emprestimo-info">
-          <strong>${e.nome}</strong><br>
-          📱 ${e.whatsapp || 'Sem número'}<br>
-          💰 R$ ${e.valor} - Vence em: ${e.dataVenc||'--'}
+          <p><strong>${e.nome}</strong></p>
+          <p>💰 R$ ${e.valor} + ${e.juros}% a.d.</p>
+          <p>📅 ${e.parcelas}x - ${e.dataInicio} → ${e.dataVencimento}</p>
+          <p><strong>Total: R$ ${e.total}</strong> (${e.dias} dias)</p>
         </div>
-      </div>
-      <div class="emprestimo-actions">
-        <button onclick="editarEmprestimo(${i})">✏️ Editar</button>
-        <button class="btn-green" onclick="reajustarEmprestimo(${i})">🔁 Reajustar</button>
-        <button class="btn-danger" onclick="excluirEmprestimo(${i})">🗑️ Excluir</button>
-      </div>`;
-    div.appendChild(card);
-  });
-}
-function filtrarEmprestimos(){
-  const termo=document.getElementById("filtroBusca").value.toLowerCase();
-  const lista=JSON.parse(localStorage.getItem("emprestimos"))||[];
-  const filtrada=lista.filter(e=>e.nome.toLowerCase().includes(termo));
-  exibirEmprestimos(filtrada);
-}
-function editarEmprestimo(i){
-  const lista=JSON.parse(localStorage.getItem("emprestimos"))||[];
-  const e=lista[i];
-  document.getElementById("nomeCliente").value=e.nome;
-  document.getElementById("whatsappCliente").value=e.whatsapp;
-  document.getElementById("enderecoCliente").value=e.endereco;
-  document.getElementById("valor").value=e.valor;
-  document.getElementById("dataVencimento").value=e.dataVenc;
-  lista.splice(i,1);
-  localStorage.setItem("emprestimos",JSON.stringify(lista));
-  exibirEmprestimos();
-}
-function excluirEmprestimo(i){
-  const lista=JSON.parse(localStorage.getItem("emprestimos"))||[];
-  if(confirm("Deseja excluir este empréstimo?")){
-    lista.splice(i,1);
-    localStorage.setItem("emprestimos",JSON.stringify(lista));
+        <div>
+          <button class="btn-renovar" onclick="renovarEmprestimo(${e.id})">🔄</button>
+          <button class="btn-danger" onclick="excluirEmprestimo(${e.id})">🗑️</button>
+        </div>
+      `;
+      lista.appendChild(div);
+    });
+
+    if (filtrados.length === 0)
+      lista.innerHTML = `<p style="text-align:center;opacity:0.7;">Nenhum empréstimo encontrado</p>`;
+  }
+
+  function excluirEmprestimo(id) {
+    const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
+    const novos = emprestimos.filter(e => e.id !== id);
+    localStorage.setItem("emprestimos", JSON.stringify(novos));
     exibirEmprestimos();
   }
-}
-function reajustarEmprestimo(i){
-  alert("💡 Função de reajuste futura — poderá recalcular juros automaticamente!");
-}
+
+  function renovarEmprestimo(id) {
+    const emprestimos = JSON.parse(localStorage.getItem("emprestimos")) || [];
+    const emp = emprestimos.find(e => e.id === id);
+    if (emp) {
+      emp.id = Date.now();
+      emp.dataInicio = new Date().toISOString().split("T")[0];
+      emprestimos.push(emp);
+      localStorage.setItem("emprestimos", JSON.stringify(emprestimos));
+      alert("♻️ Empréstimo renovado com nova data!");
+      exibirEmprestimos();
+    }
+  }
 </script>
+
 </body>
 </html>

@@ -499,10 +499,23 @@ function exibirClientes(){
     });
 }
 
-function solicitarEmprestimo(nome, whatsapp){
-  localStorage.setItem("emprestimoTemp", JSON.stringify({ nome, whatsapp }));
+function solicitarEmprestimo(nome, whatsapp) {
+  const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+  const cliente = clientes.find(c => c.nome === nome);
+
+  if (cliente) {
+    // Salva todas as informações no localStorage temporário
+    localStorage.setItem("emprestimoTemp", JSON.stringify({
+      nome: cliente.nome,
+      whatsapp: cliente.whatsapp,
+      endereco: cliente.endereco,
+      fotoPerfil: cliente.fotoPerfil
+    }));
+  }
+
   window.location.href = "emprestimo.html";
 }
+
 
 function excluirCliente(id){
   const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
