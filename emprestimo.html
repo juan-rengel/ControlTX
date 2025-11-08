@@ -243,6 +243,17 @@
       display: block;
       opacity: 1;
     }
+
+    .emprestimo-card {
+  background: var(--card);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+.emprestimo-card:hover {
+  transform: scale(1.02);
+  background: var(--accent);
+  color: #fff;
+}
   </style>
 </head>
 
@@ -403,13 +414,19 @@ function carregarClientes() {
   });
 }
 
-window.onload = () => {
-  const temaSalvo = localStorage.getItem("tema");
-  if (temaSalvo === "light") document.body.classList.add("light");
-  atualizarIconeTema();
-  carregarClientes(); // 🔹 chama o carregamento dos clientes
-};
+document.querySelectorAll(".sidebar a").forEach(link => {
+  link.addEventListener("click", () => fecharMenu());
+});
 
+// Preenche automaticamente o nome do cliente vindo da página anterior
+window.addEventListener("DOMContentLoaded", () => {
+  const clienteSelecionado = localStorage.getItem("clienteSelecionado");
+  if (clienteSelecionado) {
+    document.getElementById("cliente").value = clienteSelecionado;
+    document.getElementById("clienteExistente").value = clienteSelecionado;
+    localStorage.removeItem("clienteSelecionado"); // limpa depois
+  }
+});
   </script>
 </body>
 </html>
