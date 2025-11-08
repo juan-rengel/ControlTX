@@ -143,11 +143,6 @@
       transform: scale(1.01);
     }
 
-    h2 {
-      color: var(--accent);
-      margin-top: 0;
-    }
-
     input {
       width: 100%;
       padding: 10px;
@@ -238,6 +233,13 @@
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
 
+    .modal-caption {
+      text-align: center;
+      color: #fff;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
     .fechar {
       position: absolute;
       top: 25px;
@@ -296,10 +298,16 @@
       <input type="text" id="nome" placeholder="Nome do cliente" />
       <input type="text" id="whatsapp" placeholder="WhatsApp" />
       <input type="text" id="endereco" placeholder="Endereço (opcional)" />
+
+      <label>📸 Foto de Perfil:</label>
+      <input type="file" id="fotoPerfil" accept="image/*" />
+
       <label>📄 Foto Documento:</label>
       <input type="file" id="fotoDocumento" accept="image/*" />
+
       <label>🏠 Comprovante de Residência:</label>
       <input type="file" id="comprovanteResidencia" accept="image/*" />
+
       <button onclick="salvarCliente()">💾 Salvar</button>
       <button class="btn-danger" onclick="limparCampos()">🧹 Limpar</button>
     </div>
@@ -315,6 +323,7 @@
   <div id="modalImagem" class="modal" onclick="fecharModal()">
     <span class="fechar">&times;</span>
     <img class="modal-content" id="imgModal" />
+    <div class="modal-caption" id="caption"></div>
   </div>
 
   <script>
@@ -343,40 +352,53 @@
       const nome = document.getElementById("nome").value.trim();
       const whatsapp = document.getElementById("whatsapp").value.trim();
       const endereco = document.getElementById("endereco").value.trim();
+      const fotoPerfilInput = document.getElementById("fotoPerfil");
       const fotoDocumentoInput = document.getElementById("fotoDocumento");
       const comprovanteResidenciaInput = document.getElementById("comprovanteResidencia");
 
       if (!nome) return alert("⚠️ Informe o nome do cliente!");
 
       const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      if (clientes.some(c => c.nome.toLowerCase() === nome.toLowerCase())) return alert("⚠️ Este cliente já está cadastrado!");
+      if (clientes.some(c => c.nome.toLowerCase() === nome.toLowerCase()))
+        return alert("⚠️ Este cliente já está cadastrado!");
 
+      const readerPerfil = new FileReader();
       const readerDoc = new FileReader();
       const readerComp = new FileReader();
 
-      readerDoc.onload = function(e1) {
-        const docImg = e1.target.result;
-        readerComp.onload = function(e2) {
-          const compImg = e2.target.result;
-          const cliente = { nome, whatsapp, endereco, fotoDocumento: docImg, comprovanteResidencia: compImg };
-          clientes.push(cliente);
-          localStorage.setItem("clientes", JSON.stringify(clientes));
-          exibirClientes();
-          limparCampos();
+      readerPerfil.onload = e1 => {
+        const perfilImg = e1.target.result;
+        readerDoc.onload = e2 => {
+          const docImg = e2.target.result;
+          readerComp.onload = e3 => {
+            const compImg = e3.target.result;
+            const cliente = {
+              nome,
+              whatsapp,
+              endereco,
+              fotoPerfil: perfilImg,
+              fotoDocumento: docImg,
+              comprovanteResidencia: compImg
+            };
+            clientes.push(cliente);
+            localStorage.setItem("clientes", JSON.stringify(clientes));
+            exibirClientes();
+            limparCampos();
+          };
+          if (comprovanteResidenciaInput.files[0]) readerComp.readAsDataURL(comprovanteResidenciaInput.files[0]);
+          else readerComp.onload();
         };
-        if (comprovanteResidenciaInput.files[0]) readerComp.readAsDataURL(comprovanteResidenciaInput.files[0]);
-        else readerComp.onload();
+        if (fotoDocumentoInput.files[0]) readerDoc.readAsDataURL(fotoDocumentoInput.files[0]);
+        else readerDoc.onload();
       };
-      if (fotoDocumentoInput.files[0]) readerDoc.readAsDataURL(fotoDocumentoInput.files[0]);
-      else readerDoc.onload();
+      if (fotoPerfilInput.files[0]) readerPerfil.readAsDataURL(fotoPerfilInput.files[0]);
+      else readerPerfil.onload();
     }
 
     function limparCampos() {
-      document.getElementById("nome").value = "";
-      document.getElementById("whatsapp").value = "";
-      document.getElementById("endereco").value = "";
-      document.getElementById("fotoDocumento").value = "";
-      document.getElementById("comprovanteResidencia").value = "";
+      ["nome", "whatsapp", "endereco", "fotoPerfil", "fotoDocumento", "comprovanteResidencia"].forEach(id => {
+        document.getElementById(id).value = "";
+      });
     }
 
     function exibirClientes(listaFiltrada) {
@@ -389,8 +411,9 @@
         div.className = "cliente-card";
         div.innerHTML = `
           <div class="cliente-imagens">
-            ${c.fotoDocumento ? `<img src="${c.fotoDocumento}" alt="Documento" onclick="abrirModal('${c.fotoDocumento}')">` : ""}
-            ${c.comprovanteResidencia ? `<img src="${c.comprovanteResidencia}" alt="Comprovante" onclick="abrirModal('${c.comprovanteResidencia}')">` : ""}
+            ${c.fotoPerfil ? `<img src="${c.fotoPerfil}" alt="Perfil" onclick="abrirModal('${c.fotoPerfil}','${c.nome}','Foto de Perfil')">` : ""}
+            ${c.fotoDocumento ? `<img src="${c.fotoDocumento}" alt="Documento" onclick="abrirModal('${c.fotoDocumento}','${c.nome}','Documento')">` : ""}
+            ${c.comprovanteResidencia ? `<img src="${c.comprovanteResidencia}" alt="Comprovante" onclick="abrirModal('${c.comprovanteResidencia}','${c.nome}','Comprovante de Residência')">` : ""}
           </div>
           <div class="cliente-info">
             <strong>👤 ${c.nome}</strong><br>
@@ -407,11 +430,13 @@
       });
     }
 
-    function abrirModal(src) {
+    function abrirModal(src, nome, tipo) {
       const modal = document.getElementById("modalImagem");
       const imgModal = document.getElementById("imgModal");
+      const caption = document.getElementById("caption");
       modal.style.display = "block";
       imgModal.src = src;
+      caption.textContent = `${nome} - ${tipo}`;
     }
 
     function fecharModal() {
