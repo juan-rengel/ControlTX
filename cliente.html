@@ -257,6 +257,7 @@
 
     <div class="card">
       <h2>📋 Clientes Cadastrados</h2>
+      <input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome..." oninput="filtrarClientes()" />
       <div id="listaClientes"></div>
     </div>
   </main>
@@ -277,7 +278,6 @@
     function toggleMenu() {
       const sidebar = document.getElementById("sidebar");
       sidebar.classList.toggle("abrir");
-      // Fecha o menu automaticamente ao clicar em item no mobile
       const links = sidebar.querySelectorAll("a");
       links.forEach(link => link.addEventListener("click", () => {
         if (window.innerWidth <= 768) sidebar.classList.remove("abrir");
@@ -291,41 +291,39 @@
       const fotoDocumento = document.getElementById("fotoDocumento").value;
       const comprovanteResidencia = document.getElementById("comprovanteResidencia").value;
 
-      if (!nome) {
-        alert("⚠️ Informe o nome do cliente!");
-        return;
-      }
-
-      if (whatsapp && !/^\d{8,15}$/.test(whatsapp)) {
-        alert("⚠️ Informe um número de WhatsApp válido!");
-        return;
-      }
+      if (!nome) return alert("⚠️ Informe o nome do cliente!");
+      if (whatsapp && !/^\d{8,15}$/.test(whatsapp)) return alert("⚠️ Informe um número de WhatsApp válido!");
 
       const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-      if (clientes.some(c => c.nome.toLowerCase() === nome.toLowerCase())) {
-        alert("⚠️ Este cliente já está cadastrado!");
-        return;
-      }
+      if (clientes.some(c => c.nome.toLowerCase() === nome.toLowerCase()))
+        return alert("⚠️ Este cliente já está cadastrado!");
 
-      const cliente = { nome, whatsapp, endereco, fotoDocumento, comprovanteResidencia };
-      clientes.push(cliente);
+      clientes.push({ nome, whatsapp, endereco, fotoDocumento, comprovanteResidencia });
+
+      // Ordena alfabeticamente
+      clientes.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+
       localStorage.setItem("clientes", JSON.stringify(clientes));
       exibirClientes();
       limparCampos();
     }
 
     function limparCampos() {
-      document.getElementById("nome").value = "";
-      document.getElementById("whatsapp").value = "";
-      document.getElementById("endereco").value = "";
-      document.getElementById("fotoDocumento").value = "";
-      document.getElementById("comprovanteResidencia").value = "";
+      ["nome", "whatsapp", "endereco", "fotoDocumento", "comprovanteResidencia"].forEach(id => {
+        document.getElementById(id).value = "";
+      });
     }
 
-    function exibirClientes() {
+    function exibirClientes(listaFiltrada) {
       const lista = document.getElementById("listaClientes");
       lista.innerHTML = "";
-      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      const clientes = listaFiltrada || JSON.parse(localStorage.getItem("clientes")) || [];
+
+      if (clientes.length === 0) {
+        lista.innerHTML = "<p>Nenhum cliente encontrado.</p>";
+        return;
+      }
+
       clientes.forEach((c, i) => {
         const div = document.createElement("div");
         div.className = "cliente-card";
@@ -344,6 +342,15 @@
         `;
         lista.appendChild(div);
       });
+    }
+
+    function filtrarClientes() {
+      const termo = document.getElementById("filtroNome").value.toLowerCase();
+      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      const filtrados = clientes
+        .filter(c => c.nome.toLowerCase().includes(termo))
+        .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+      exibirClientes(filtrados);
     }
 
     function solicitarEmprestimo(nome, whatsapp) {
@@ -375,6 +382,12 @@
       const tema = localStorage.getItem("tema");
       if (tema === "light") document.body.classList.add("light");
       atualizarIconeTema();
+
+      // Ordena e exibe clientes na carga inicial
+      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      clientes.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+
       exibirClientes();
     };
   </script>
