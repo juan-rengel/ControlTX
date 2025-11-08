@@ -72,10 +72,6 @@
       color: #fff;
     }
 
-    .sidebar.fechar {
-      transform: translateX(-100%);
-    }
-
     header {
       background: var(--card);
       color: var(--accent);
@@ -220,6 +216,43 @@
       margin-top: 10px;
     }
 
+    /* ==== MODAL IMAGEM ==== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      padding-top: 60px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .fechar {
+      position: absolute;
+      top: 25px;
+      right: 45px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .fechar:hover {
+      color: var(--accent);
+    }
+
     @media (max-width: 768px) {
       .sidebar {
         transform: translateX(-100%);
@@ -277,6 +310,12 @@
       <div id="listaClientes"></div>
     </div>
   </main>
+
+  <!-- Modal de visualização de imagem -->
+  <div id="modalImagem" class="modal" onclick="fecharModal()">
+    <span class="fechar">&times;</span>
+    <img class="modal-content" id="imgModal" />
+  </div>
 
   <script>
     function alternarTema() {
@@ -350,8 +389,8 @@
         div.className = "cliente-card";
         div.innerHTML = `
           <div class="cliente-imagens">
-            ${c.fotoDocumento ? `<img src="${c.fotoDocumento}" alt="Documento" onclick="abrirImagem('${c.fotoDocumento}')">` : ""}
-            ${c.comprovanteResidencia ? `<img src="${c.comprovanteResidencia}" alt="Comprovante" onclick="abrirImagem('${c.comprovanteResidencia}')">` : ""}
+            ${c.fotoDocumento ? `<img src="${c.fotoDocumento}" alt="Documento" onclick="abrirModal('${c.fotoDocumento}')">` : ""}
+            ${c.comprovanteResidencia ? `<img src="${c.comprovanteResidencia}" alt="Comprovante" onclick="abrirModal('${c.comprovanteResidencia}')">` : ""}
           </div>
           <div class="cliente-info">
             <strong>👤 ${c.nome}</strong><br>
@@ -368,9 +407,15 @@
       });
     }
 
-    function abrirImagem(src) {
-      const win = window.open();
-      win.document.write(`<img src="${src}" style="width:100%">`);
+    function abrirModal(src) {
+      const modal = document.getElementById("modalImagem");
+      const imgModal = document.getElementById("imgModal");
+      modal.style.display = "block";
+      imgModal.src = src;
+    }
+
+    function fecharModal() {
+      document.getElementById("modalImagem").style.display = "none";
     }
 
     function solicitarEmprestimo(nome, whatsapp) {
