@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>👥 Clientes - MJ Tecnologia</title>
 <style>
   :root{
@@ -286,60 +287,69 @@ button:hover {
 }
 
 
+
+/* Ajustes responsivos para o card de clientes */
+@media (max-width: 768px) {
+  .card-cliente {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .card-cliente input {
+    width: 90% !important;
+    margin-bottom: 8px;
+  }
+  .card-cliente button {
+    display: block;
+    margin: 10px auto 0 auto;
+  }
+}
 </style>
 </head>
 <body>
-  <aside class="sidebar" id="sidebar">
-    <h2>📊 MJ</h2>
-    <a href="index.html">🏠 Dashboard</a>
-    <a href="cliente.html" class="ativo">👥 Clientes</a>
-    <a href="emprestimo.html">💸 Empréstimos</a>
+<aside class="sidebar" id="sidebar">
+<h2>📊 MJ</h2>
+<a href="index.html">🏠 Dashboard</a>
+<a class="ativo" href="cliente.html">👥 Clientes</a>
+<a href="emprestimo.html">💸 Empréstimos</a>
+<a href="calendario.html">📅 Calendário</a>
     <a href="config.html">⚙️ Configurações</a>
-  </aside>
-
-  <header>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <button class="menu-btn" onclick="toggleMenu()">☰</button>
-      <h1>👥 Clientes - MJ </h1>
-    </div>
-    <button class="theme-toggle" onclick="alternarTema()">🌙 Tema</button>
-  </header>
-
-  <main>
-    <div class="card">
-      <h2>Novo Cliente</h2>
-      <form id="formCliente">
-        <input type="text" id="nome" placeholder="Nome do cliente" required />
-        <input type="text" id="whatsapp" placeholder="WhatsApp" />
-        <input type="text" id="endereco" placeholder="Endereço (opcional)" />
-
-        <label>📸 Foto de Perfil:</label>
-        <input type="file" id="fotoPerfil" accept="image/*" />
-
-        <label>📄 Documento:</label>
-        <input type="file" id="fotoDocumento" accept="image/*" />
-
-        <label>🏠 Comprovante de Residência:</label>
-        <input type="file" id="comprovanteResidencia" accept="image/*" />
-
-        <div style="margin-top:10px;">
-          <button type="submit" id="btnSalvar">💾 Salvar</button>
-          <button type="button" class="btn-danger" onclick="limparCampos()">🧹 Limpar</button>
-        </div>
-      </form>
-    </div>
-
-    <div class="card">
-      <h2>📋 Clientes Cadastrados</h2>
-      <div class="filtro">
-        <input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome do cliente..." />
-      </div>
-      <div id="listaClientes"></div>
-    </div>
-  </main>
-
-  <div id="toast" class="toast" aria-hidden="true">✅ Cliente salvo com sucesso!</div>
-
+</aside>
+<header>
+<div style="display:flex;align-items:center;gap:10px;">
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+<h1>👥 Clientes - MJ </h1>
+</div>
+<button class="theme-toggle" onclick="alternarTema()">🌙 Tema</button>
+</header>
+<main>
+<div class="card">
+<h2>Novo Cliente</h2>
+<form id="formCliente">
+<input id="nome" placeholder="Nome do cliente" required="" type="text"/>
+<input id="whatsapp" placeholder="WhatsApp" type="text"/>
+<input id="endereco" placeholder="Endereço (opcional)" type="text"/>
+<label>📸 Foto de Perfil:</label>
+<input accept="image/*" id="fotoPerfil" type="file"/>
+<label>📄 Documento:</label>
+<input accept="image/*" id="fotoDocumento" type="file"/>
+<label>🏠 Comprovante de Residência:</label>
+<input accept="image/*" id="comprovanteResidencia" type="file"/>
+<div style="margin-top:10px;">
+<button id="btnSalvar" type="submit">💾 Salvar</button>
+<button class="btn-danger" onclick="limparCampos()" type="button">🧹 Limpar</button>
+</div>
+</form>
+</div>
+<div class="card">
+<h2>📋 Clientes Cadastrados</h2>
+<div class="filtro">
+<input id="filtroNome" placeholder="🔍 Filtrar por nome do cliente..." type="text"/>
+</div>
+<div id="listaClientes"></div>
+</div>
+</main>
+<div aria-hidden="true" class="toast" id="toast">✅ Cliente salvo com sucesso!</div>
 <script>
 /* final robust script */
 let editingId = null;

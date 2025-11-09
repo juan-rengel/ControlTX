@@ -1,313 +1,311 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>📊 Dashboard Financeiro - MJ</title>
-  <style>
-    /* ======== VARIÁVEIS DE TEMA ======== */
-    :root {
-      --bg: #0a0f1f;
-      --card: #141c2f;
-      --text: #e2e8f0;
-      --accent: #007bff;
-      --sidebar: #10172a;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumo - ControlTX</title>
+<style>
+:root {
+  --bg: #0a0f1f;
+  --card: #141c2f;
+  --text: #e2e8f0;
+  --accent: #1e40af;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+}
 
-    body.light {
-      --bg: #f4f6fb;
-      --card: #ffffff;
-      --text: #222;
-      --accent: #007bff;
-      --sidebar: #f0f0f0;
-    }
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top:0;
+  left:0;
+  width:220px;
+  height:100%;
+  background-color: var(--card);
+  padding:20px;
+  box-sizing:border-box;
+  transition: transform 0.3s ease;
+  z-index:1000;
+}
+.sidebar h2 {margin-top:0;color:var(--accent);}
+.sidebar a {
+  display:block;
+  color:var(--text);
+  text-decoration:none;
+  margin:10px 0;
+  padding:8px 5px;
+  border-radius:5px;
+}
+.sidebar a:hover {background-color: #1e40af33;}
 
-    /* ======== BASE ======== */
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-      display: flex;
-      transition: 0.4s;
-    }
+/* Hamburger */
+.hamburger {
+  display:none;
+  position:fixed;
+  top:15px;
+  left:15px;
+  z-index:1100;
+  cursor:pointer;
+  flex-direction:column;
+  gap:5px;
+}
+.hamburger div {
+  width:25px;
+  height:3px;
+  background-color: var(--text);
+  transition:0.3s;
+}
 
-    /* ======== MENU LATERAL ======== */
-    .sidebar {
-      width: 240px;
-      background: var(--sidebar);
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.3);
-      z-index: 1000;
-      transition: 0.4s;
-    }
+/* Conteúdo principal */
+.main {
+  margin-left:240px;
+  padding:20px;
+  transition: margin-left 0.3s ease;
+}
 
-    .sidebar.hidden {
-      transform: translateX(-100%);
-    }
+/* Cards */
+.cards {
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+}
+.card {
+  background-color: var(--card);
+  padding:20px;
+  border-radius:8px;
+  flex:1 1 200px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow:0 4px 10px rgba(0,0,0,0.5);
+}
+.card h3 {margin-top:0;color:var(--accent); display:flex; align-items:center; gap:5px;}
+.card p {font-size:1.5em;margin:10px 0 0 0;}
 
-    .sidebar h2 {
-      text-align: center;
-      padding: 20px 0;
-      color: var(--accent);
-      margin: 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
+/* Seção mensagens do dia e alerta */
+.section-card {
+  background-color: var(--card);
+  padding:20px;
+  border-radius:8px;
+  margin-top:20px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.3);
+}
 
-    .sidebar a {
-      color: var(--text);
-      padding: 12px 20px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-radius: 8px;
-      margin: 6px 10px;
-      transition: 0.3s;
-    }
+/* Alerta de vencimentos */
+#alertaVencimentos {
+  background-color:#ff4444;
+  color:#fff;
+}
 
-    .sidebar a:hover, .sidebar a.ativo {
-      background: var(--accent);
-      color: #fff;
-    }
+/* Botões */
+button {
+  background-color: var(--accent);
+  color:#fff;
+  border:none;
+  padding:10px 15px;
+  border-radius:5px;
+  cursor:pointer;
+  margin-top:10px;
+}
+button:hover {background-color:#1e40afcc;}
 
-    /* ======== HEADER ======== */
-    header {
-      background: var(--card);
-      color: var(--accent);
-      padding: 15px 25px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      position: fixed;
-      top: 0;
-      left: 240px;
-      right: 0;
-      z-index: 999;
-      transition: 0.4s;
-    }
+/* Lista clientes vencendo */
+#listaClientesVencendo li{
+  margin-bottom:5px;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-      color: var(--accent);
-    }
-
-    .menu-btn {
-      display: none;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .menu-btn:hover {
-      opacity: 0.9;
-    }
-
-    .theme-toggle {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .theme-toggle:hover {
-      opacity: 0.9;
-    }
-
-    /* ======== CONTEÚDO ======== */
-    main {
-      margin-left: 260px;
-      margin-top: 90px;
-      padding: 20px;
-      width: 100%;
-      max-width: 1200px;
-      transition: 0.4s;
-    }
-
-    .cards-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s, box-shadow 0.3s;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-    }
-
-    .card h3 {
-      margin: 0 0 8px;
-      color: var(--accent);
-    }
-
-    .valor {
-      font-size: 26px;
-      font-weight: bold;
-      color: var(--text);
-    }
-
-    /* ======== RESPONSIVIDADE ======== */
-    @media (max-width: 768px) {
-      .menu-btn {
-        display: block;
-        margin-right: 10px;
-      }
-
-      header {
-        left: 0;
-      }
-
-      main {
-        margin-left: 0;
-      }
-
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .sidebar.show {
-        transform: translateX(0);
-      }
-    }
-  </style>
+/* Responsivo */
+@media(max-width:768px){
+  .sidebar {transform:translateX(-100%);}
+  .sidebar.active {transform:translateX(0);}
+  .main {margin-left:0;}
+  .hamburger {display:flex;}
+}
+</style>
 </head>
-
 <body>
-  <!-- ======== MENU LATERAL ======== -->
-  <aside class="sidebar" id="sidebar">
-    <h2>📊 MJ</h2>
-    <a href="#" class="ativo">🏠 Dashboard</a>
-    <a href="cliente.html">👥 Clientes</a>
-    <a href="emprestimo.html">💸 Empréstimos</a>
-    <a href="config.html">⚙️ Configurações</a>
-  </aside>
 
-  <!-- ======== CABEÇALHO ======== -->
-  <header>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <button class="menu-btn" onclick="toggleMenu()">☰</button>
-      <h1>📊 Dashboard</h1>
+<!-- Hamburger -->
+<div class="hamburger" id="hamburger"><div></div><div></div><div></div></div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <h2>MJ Tecnologia</h2>
+  <a href="index.html" data-tab="dashboard">Dashboard</a>
+  <a href="cliente.html">Clientes</a>
+  <a href="emprestimo.html">Empréstimos</a>
+  <a href="config.html">Configurações</a>
+</div>
+
+<!-- Conteúdo principal -->
+<div class="main" id="main">
+
+  <!-- Dashboard -->
+  <section id="dashboard" class="active">
+    <h1>📊 Resumo - ControlTX</h1>
+
+    <!-- Alerta de vencimentos -->
+    <div id="alertaVencimentos" class="section-card" style="display:none;">
+      <p id="mensagemVencimentos"></p>
+      <ul id="listaClientesVencendo"></ul>
+      <button id="btnEnviarVencimentos">Enviar Mensagens Agora</button>
     </div>
-    <button class="theme-toggle" onclick="alternarTema()">🌙 Tema</button>
-  </header>
 
-  <!-- ======== CONTEÚDO ======== -->
-  <main>
-    <div class="cards-container">
-      <div class="card">
-        <h3>Total de Empréstimos</h3>
-        <div class="valor" id="totalEmprestimos">R$ 0,00</div>
-      </div>
-
-      <div class="card">
-        <h3>Juros Recebidos</h3>
-        <div class="valor" id="jurosRecebidos">R$ 0,00</div>
-      </div>
-
-      <div class="card">
-        <h3>Total a Receber</h3>
-        <div class="valor" id="totalReceber">R$ 0,00</div>
-      </div>
-
-      <div class="card">
-        <h3>Clientes Pendentes</h3>
-        <div class="valor" id="clientesPendentes">0</div>
-      </div>
-
-      <div class="card">
-        <h3>Atrasados</h3>
-        <div class="valor" id="clientesAtrasados">0</div>
-      </div>
-
-      <div class="card">
-        <h3>Vencendo em 1 dia</h3>
-        <div class="valor" id="vencendoAmanha">0</div>
-      </div>
+    <!-- Cards resumo -->
+    <div class="cards">
+      <div class="card"><h3>💰 Total Emprestado</h3><p id="totalEmprestado">R$ 0,00</p></div>
+      <div class="card"><h3>📈 Empréstimos Ativos</h3><p id="emprestimosAtivos">0</p></div>
+      <div class="card"><h3>🏦 Total Recebido</h3><p id="totalRecebido">R$ 0,00</p></div>
+      <div class="card"><h3>💵 Lucro Estimado (Juros)</h3><p id="lucroJuros">R$ 0,00</p></div>
+      <div class="card"><h3>👥 Total de Clientes</h3><p id="totalClientes">0</p></div>
     </div>
-  </main>
 
-  <script>
-  // ===== MENU RESPONSIVO =====
-  const sidebar = document.getElementById("sidebar");
+    <!-- Botão enviar mensagens do dia -->
+    <div class="section-card">
+      <h3>📤 Mensagens do Dia</h3>
+      <button id="enviarMensagensDia">Enviar Mensagens do Dia</button>
+    </div>
+  </section>
 
-  function toggleMenu() {
-    sidebar.classList.toggle("show");
+</div>
+
+<script>
+// Menu lateral toggle
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const main = document.getElementById('main');
+
+hamburger.addEventListener('click', ()=>{ sidebar.classList.toggle('active'); });
+main.addEventListener('click', ()=>{ if(sidebar.classList.contains('active')) sidebar.classList.remove('active'); });
+
+// Funções de resumo
+function formatCurrency(value){ 
+  return value.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); 
+}
+
+function atualizarResumo(){
+  const emprestimos = JSON.parse(localStorage.getItem('emprestimos'))||[];
+  let totalEmprestado=0, totalRecebido=0, lucroJuros=0, emprestimosAtivos=0;
+  const clientes = new Set();
+
+  emprestimos.forEach(emp=>{
+    const valor=parseFloat(emp.valor)||0;
+    const pago=emp.pago?parseFloat(emp.valorPago||emp.valor||0):0;
+    const juros=parseFloat(emp.juros||0);
+
+    totalEmprestado+=valor;
+    totalRecebido+=pago;
+    lucroJuros+=(emp.pago?juros:0);
+    if(!emp.pago) emprestimosAtivos++;
+    if(emp.cliente) clientes.add(emp.cliente);
+  });
+
+  document.getElementById('totalEmprestado').textContent=formatCurrency(totalEmprestado);
+  document.getElementById('totalRecebido').textContent=formatCurrency(totalRecebido);
+  document.getElementById('lucroJuros').textContent=formatCurrency(lucroJuros);
+  document.getElementById('emprestimosAtivos').textContent=emprestimosAtivos;
+  document.getElementById('totalClientes').textContent=clientes.size;
+}
+
+// Função enviar mensagem WhatsApp
+function enviarMensagemWhatsApp(cliente, valor, chavePix, numeroWhatsApp) {
+  const mensagem = `Olá ${cliente},\n\nO seu empréstimo no valor de R$ ${valor.toFixed(2)} vence hoje.\nPor favor, realize o pagamento via PIX para a chave: ${chavePix}.\n\nObrigado!`;
+  const link = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(link, '_blank');
+}
+
+// Função para detectar se a data é hoje (qualquer formato)
+function isHoje(dataStr) {
+  if(!dataStr) return false;
+  const hoje = new Date();
+  const data = new Date(dataStr.split('/').reverse().join('-')); // tenta DD/MM/YYYY -> YYYY-MM-DD
+  return hoje.getFullYear() === data.getFullYear() &&
+         hoje.getMonth() === data.getMonth() &&
+         hoje.getDate() === data.getDate();
+}
+
+// Verificar vencimentos hoje e exibir alerta com lista de clientes
+function verificarVencimentosHoje(){
+  const emprestimos = JSON.parse(localStorage.getItem('emprestimos')) || [];
+  const perfil = JSON.parse(localStorage.getItem('perfilProprietario')) || {};
+  const numeroWhatsApp = perfil.whatsapp || '';
+  const chavePix = perfil.pix || '';
+
+  const vencendoHoje = emprestimos.filter(emp => !emp.pago && isHoje(emp.dataVencimento));
+
+  const alertaDiv = document.getElementById('alertaVencimentos');
+  const mensagem = document.getElementById('mensagemVencimentos');
+  const listaClientes = document.getElementById('listaClientesVencendo');
+
+  if(vencendoHoje.length > 0){
+    alertaDiv.style.display = 'block';
+    mensagem.textContent = `⚠️ Existem ${vencendoHoje.length} empréstimo(s) vencendo hoje:`;
+
+    // Limpar lista anterior
+    listaClientes.innerHTML = '';
+    vencendoHoje.forEach(emp=>{
+      const li = document.createElement('li');
+      li.textContent = emp.cliente;
+      listaClientes.appendChild(li);
+    });
+
+    document.getElementById('btnEnviarVencimentos').onclick = ()=>{
+      if(!numeroWhatsApp || !chavePix){
+        alert('Por favor, cadastre WhatsApp e PIX do proprietário em Configurações.');
+        return;
+      }
+      vencendoHoje.forEach(emp=>{
+        enviarMensagemWhatsApp(emp.cliente, parseFloat(emp.valor), chavePix, numeroWhatsApp);
+      });
+      alert(`${vencendoHoje.length} mensagem(ns) prontas para envio!`);
+    };
+  } else {
+    alertaDiv.style.display = 'none';
+  }
+}
+
+// Botão enviar mensagens do dia (manual)
+document.getElementById('enviarMensagensDia').addEventListener('click', ()=>{
+  const emprestimos = JSON.parse(localStorage.getItem('emprestimos')) || [];
+  const perfil = JSON.parse(localStorage.getItem('perfilProprietario')) || {};
+  const numeroWhatsApp = perfil.whatsapp || '';
+  const chavePix = perfil.pix || '';
+
+  if(!numeroWhatsApp || !chavePix){
+    alert('Por favor, cadastre WhatsApp e PIX do proprietário em Configurações.');
+    return;
   }
 
-  // Fecha o menu ao clicar fora (apenas no modo mobile)
-  document.addEventListener("click", (e) => {
-    const isMenuButton = e.target.closest(".menu-btn");
-    const isSidebar = e.target.closest(".sidebar");
-    const isMobile = window.innerWidth <= 768;
-
-    if (isMobile && !isSidebar && !isMenuButton) {
-      sidebar.classList.remove("show");
+  let count = 0;
+  emprestimos.forEach(emp=>{
+    if(!emp.pago && isHoje(emp.dataVencimento)){
+      enviarMensagemWhatsApp(emp.cliente, parseFloat(emp.valor), chavePix, numeroWhatsApp);
+      count++;
     }
   });
 
-  // ===== TEMA DARK/LIGHT =====
-  function alternarTema() {
-    document.body.classList.toggle("light");
-    const temaAtual = document.body.classList.contains("light") ? "light" : "dark";
-    localStorage.setItem("tema", temaAtual);
-    atualizarIconeTema();
+  if(count === 0) alert('Nenhum empréstimo vence hoje.');
+  else alert(`${count} mensagem(ns) prontas para envio!`);
+});
+
+// Inicialização
+window.onload = ()=>{
+  atualizarResumo();
+  verificarVencimentosHoje();
+};
+window.addEventListener('storage', event=>{
+  if(event.key==='emprestimos') {
+    atualizarResumo();
+    verificarVencimentosHoje();
   }
-
-  function atualizarIconeTema() {
-    const botao = document.querySelector(".theme-toggle");
-    botao.textContent = document.body.classList.contains("light") ? "☀️ Tema" : "🌙 Tema";
-  }
-
-  window.onload = () => {
-    const temaSalvo = localStorage.getItem("tema");
-    if (temaSalvo === "light") document.body.classList.add("light");
-    atualizarIconeTema();
-    atualizarDashboard();
-  };
-
-  // ===== DASHBOARD SIMULADA =====
-  function atualizarDashboard() {
-    const totalEmprestimos = 15000;
-    const jurosRecebidos = 1200;
-    const totalReceber = 3800;
-    const clientesPendentes = 8;
-    const atrasados = 3;
-    const vencendoAmanha = 2;
-
-    document.getElementById("totalEmprestimos").textContent = `R$ ${totalEmprestimos.toFixed(2)}`;
-    document.getElementById("jurosRecebidos").textContent = `R$ ${jurosRecebidos.toFixed(2)}`;
-    document.getElementById("totalReceber").textContent = `R$ ${totalReceber.toFixed(2)}`;
-    document.getElementById("clientesPendentes").textContent = clientesPendentes;
-    document.getElementById("clientesAtrasados").textContent = atrasados;
-    document.getElementById("vencendoAmanha").textContent = vencendoAmanha;
-  }
+});
 </script>
+
 </body>
 </html>
